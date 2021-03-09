@@ -10,7 +10,7 @@
 </style>
   <body>
 <div class="content">
-    <h1 id="comparing-monads-in-haskell-and-in-ocaml">Comparing Monads in Haskell and in OCaml</h1>
+   <h1 id="comparing-monads-in-haskell-and-in-ocaml">Comparing Monads in Haskell and in OCaml</h1>
 <p><em>25 Feb 2021</em> </p>
 <h2 id="1-">1.</h2>
 <p>In the introduction part of the paper <a href="https://www.cl.cam.ac.uk/~jdy22/papers/lightweight-higher-kinded-polymorphism.pdf">Lightweight Higher-kinded Polymorphism</a>, the authors compared 
@@ -73,16 +73,15 @@ type, and we want to implement the function in OCaml, it is inevitable that we e
  a family of type-specific versions of the function defined by means of modules and module functors.</p>
 <hr>
 
-<h2 id="retrospective-comments">Retrospective Comments</h2>
-<p>Below are some retrospective comments on some points asserted in the blog.</p>
+<h2 id="follow-up-comments">Follow-up Comments</h2>
+<p>Below are some follow-up comments on the blog.</p>
 <h3 id="the-monadic-return-is-overloaded-or-higher-kinded-parametric-polymorphic-">The monadic <code>return</code> is  overloaded, or (higher-kinded) parametric polymorphic ?</h3>
-<p><em>03 March 2021</em></p>
+<p><em>03 March 2021; edited on 09 March 2021</em> </p>
 <p> In Section 1 of the blog, I wrote that the monadic <code>return</code> function
  is higher-kinded polymorphic. I later noticed that the authors of the
  <em>Lightweight Higher-kinded Polymorphism</em> paper do not consider <code>return</code> in 
  Haskell as being (higher-kinded) parametric polymorphic; instead, they 
- call it overloaded. Here I clarify the concepts and explain about the 
- mistake I made in the blog. </p>
+ call it overloaded. Here I clarify the concepts. </p>
 <p> Overloading and parametric polymorphism are two distinct 
  concepts: for a parametric polymorphic function its different type-specific
  instances share exactly the same function definition, e.g., reversal of
@@ -103,8 +102,44 @@ type, and we want to implement the function in OCaml, it is inevitable that we e
  (such as the <code>Monad</code> class in Haskell) results in occurrences of 
  type variables in the signatures of certain functions; but occurrence of 
  instantiable type variables in the type signature does not imply that a 
- function so typed is necessarily parametric polymorphic.   </p>
+ function so typed is necessarily parametric polymorphic.  </p>
+<p> To be more precise, the monadic <code>return</code> function is a (higher-kinded) 
+ <em>ad-hoc</em> polymorphic function (overloading = ad-hoc polymorphism), but 
+ not a <em>parametric</em> polymorphic function.
+ It is therefore correct to say (albeit less precisely) that it is a 
+ higher-kinded polymorphic function (as I say in Section 1). </p>
+<h3 id="the-subtlety-of-checking-type-equality-in-ocaml">The subtlety of checking type equality in OCaml</h3>
+<p><em>09 March 2021</em> </p>
+<p>Following a comparison of the <code>when</code> function in Haskell with that in
+OCaml, the authors comment that the extra heaviness of writing <code>when</code> in OCaml
+comes directly from the lack of overloading in the language; but more deeply (or more
+generally) the reason is the lack of higher-kinded polymorphism. </p>
+<p>I understand that <code>return</code> is higher-kinded ad-hoc polymorphic. To have higher-kinded 
+ad-hoc polymorphism in OCaml,  which is a special form of higher-kinded polymorphism, 
+we must provide what is required by <em>any</em> form of higher-kinded polymorphism, be it ad-hoc 
+or parametric; we must allow type variables of higher-kinds, 
+or some other way of abstracting over higher-kinded type constructors. </p>
+<p>Then the authors move on to discuss the <em>alias problem</em>. They begin with the 
+argument that checking type equality is easier in Haskell than in OCaml. I have some 
+comments here. </p>
+<p>I understand that in Haskell there is no way to hide a type equation (aka. a type synonym); only 
+data constructors can be hidden and the programmer can choose to hide all or only
+some of the data constructors of an algebraic data type. But in OCaml, a
+type equation can be hidden; data constructors are exported in an all-or-nothing
+manner. In the above sense (and compared with Haskell) OCaml offers more flexibility 
+for hiding type equations, but less flexibility for hiding data constructors. </p>
+<p>The authors say that an OCaml module signature (aka. module type) <em>may</em> temporarily
+abstract a type in the case of applying a module functor. This is true and this is indeed 
+a subtle technical point of OCaml modules. OCaml functors require that their argument 
+modules must match the module types specified in the functor definitions. Explicit argument 
+module types in a functor definition tells what the functor assumes about 
+its argument modules, but these module types as functor argument specifications have no 
+effect on what the type checker can see about the argument modules.  A functor can assume 
+about an argument module no more than what is given in the argument signature but outside
+the functor, the type checker could see the full picture of the argument module which is 
+given by the module&#39;s own signature. </p>
 <p><hr>
 <em>This blog post is also on <a href="https://github.com/YueLiPicasso/intro_ocaml/tree/master/monad">GitHub</a> with some extra code examples.</em></p>
+
 
 </body></html>
