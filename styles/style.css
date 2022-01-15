@@ -12,21 +12,8 @@ body {
     font-family: 'Ma Shan Zheng', cursive;
 }
 
-#toc_container {
-    display: table;
-    font-size: 130%;
-    padding-right: 40px;
-    width: auto;
-    margin-bottom: 1em;
-    margin-left:auto; 
-    margin-right:auto; 
-}
 
-.toc_title {
-    font-weight: 700;
-    text-align: center;
-}
-
-#toc_container li, #toc_container ul, #toc_container ul li{
-    list-style: outside none none !important;
+img {
+    height:180px;
+    margin: 0px 20px 0px 0px
 }
