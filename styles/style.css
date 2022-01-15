@@ -37,11 +37,14 @@ a:hover {
     width: 28%;
 }
 
-.sidebar ul {
-    padding-left: 0;
-    list-style-type: none;
+.sidebar .twocol {
+    justify-content: center;
 }
 
+.sidebar ul {
+    list-style-type: none;
+}
+ 
 
 #lastUpdate {
     font-size: 60%;
