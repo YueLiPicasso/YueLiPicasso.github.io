@@ -2,12 +2,54 @@ html {
     font-family: 'Courgette', cursive;
 }
 
-body {
-    width: auto
-    margin: 0 auto;
-    padding: 0 20px 20px 20px;
+li {
+    line-height:200%;
+}
+
+h1, h2 {
+    text-align: center;
 }
 
 [lang="zh-Hans"] {
     font-family: 'Ma Shan Zheng', cursive;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+#main {
+    padding: 0 5% 20px 33%;
+}
+
+.twocol {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    text-align: center;
+    overflow-y: scroll;
+    height: 100%;
+    width: 28%;
+}
+
+.sidebar ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+
+#lastUpdate {
+    font-size: 60%;
+    color:red;
+}
+ 
+#profile {
+    height: 180px;
+    object-fit: contain;
+    margin: 15px auto;
 }
