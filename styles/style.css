@@ -1,5 +1,9 @@
 html {
-    font-family: 'Courgette', cursive;
+    font-family:  serif;
+}
+
+[lang="zh-Hans"] {
+    font-family:  serif;
 }
 
 li {
@@ -8,10 +12,6 @@ li {
 
 h1, h2 {
     text-align: center;
-}
-
-[lang="zh-Hans"] {
-    font-family: 'Ma Shan Zheng', cursive;
 }
 
 a:hover {
@@ -35,7 +35,7 @@ a:hover {
     flex-direction: column;
     position: fixed;
     text-align: center;
-    overflow-y: scroll;
+    overflow: scroll;
     height: 100%;
     width: 25%;
     align-items: center;
@@ -48,7 +48,7 @@ a:hover {
  
 
 #lastUpdate {
-    font-size: 60%;
+    font-size: 90%;
     color:red;
 }
  
@@ -56,4 +56,12 @@ a:hover {
     height: 180px;
     object-fit: contain;
     margin: 15px auto;
+}
+
+option {
+    width: 150px;
+}
+
+.myname {
+    font-size: larger;
 }

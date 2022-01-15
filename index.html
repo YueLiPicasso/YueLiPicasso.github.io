@@ -3,20 +3,22 @@
   <head>
     <title>黎越 博士 Dr Yue Li</title>
     <link href="styles/style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">  
     <meta charset="utf-8">
     <meta name="author" content="Li Yue">
     <script src="scripts/main.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Homemade+Apple&family=Liu+Jian+Mao+Cao&family=Ma+Shan+Zheng&family=Orbitron&family=Rock+Salt&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet"> 
   </head>
   
   <body>
     <div class="sidebar">
-	<img id="profile" src="photo/YueProfile_2019_Winter.jpg" alt="An image of Yue Li in winter 2019">
+      
+      <img id="profile" src="photo/YueProfile_2019_Winter.jpg" alt="An image of Yue Li in winter 2019">
       
       <div class="twocol">
 	<div lang="zh-Hans">
 	  <ul>
-	    <li> 黎越 博士</li>
+	    <li><span class="myname"> 黎越 博士</span></li>
 	    <li><a href="#Pub_form">论文发表</a></li>	
 	    <li><a href="#Pub_form">按场合</a></li>
 	    <li><a href="#Pub_year">按年份</a></li>
@@ -31,19 +33,42 @@
 	
 	<div>
 	  <ul>
-	    <li> Dr Yue Li</li>
+	    <li> <span class="myname"> Dr Yue Li</span></li>
 	    <li><a href="#Pub_form">Publication</a></li>
 	    <li><a href="#Pub_form">by venue</a></li>
 	    <li><a href="#Pub_year">by year</a></li>
 	    <li><a href="#Presentation"> Talks </a></li>
 	    <li><a href="#theses"> Degree Theses</a></li>
-	    <li><a href="#other_writings">Tech. Writings</a></li>
+	    <li><a href="#other_writings">Reports</a></li>
 	    <li><a href="#employment">Employment</a></li>
 	    <li><a href="#education">Education</a></li>
 	    <li><a href="#hobbies"> Hobbies </a></li>
 	  </ul>
 	</div>
       </div>
+       <div>
+	<form>  
+	  <select id = "EF" onchange = "favef()" >  
+	    <option> Choose English Font </option>   
+	    <option> Courgette </option>  
+	    <option> Homemade Apple </option>
+	    <option> Orbitron </option>
+	    <option> Rock Salt </option>
+	  </select>   
+	</form>
+       </div>
+       <div>
+	<form> 
+	  <select id = "ZF" onchange = "favzf()" >  
+	    <option> 选择中文字体</option>  
+	    <option> Liu Jian Mao Cao </option>  
+	    <option> Ma Shan Zheng </option>  
+	    <option> ZCOOL KuaiLe </option>  
+	    <option> ZCOOL QingKe HuangYou </option>  
+	  </select>   
+	</form>
+       </div>
+      
       <div>
       	<ul id="lastUpdate">
 	  <li lang="zh-Hans">已于二零二二 年一月十五日更新</li>
@@ -245,7 +270,7 @@
       
     
   
-      <h1 id="other_writings"><span lang="zh-Hans">技术文档</span> <br> Technical Writings</h1>
+      <h1 id="other_writings"><span lang="zh-Hans">技术文档</span> <br> Repors</h1>
 
       <p><b>2021</b></p>
       <ol>
