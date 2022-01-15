@@ -19,7 +19,7 @@ a:hover {
 }
 
 #main {
-    padding: 0 5% 20px 33%;
+    padding: 0 10% 20px 28%;
 }
 
 .twocol {
@@ -37,7 +37,9 @@ a:hover {
     text-align: center;
     overflow-y: scroll;
     height: 100%;
-    width: 28%;
+    width: 25%;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .sidebar ul {
