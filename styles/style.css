@@ -24,7 +24,10 @@ a:hover {
 
 .twocol {
     display: flex;
-    flex-direction: row;
+}
+
+.twocol div {
+    flex: 1;
 }
 
 .sidebar {
@@ -35,10 +38,6 @@ a:hover {
     overflow-y: scroll;
     height: 100%;
     width: 28%;
-}
-
-.sidebar .twocol {
-    justify-content: center;
 }
 
 .sidebar ul {
