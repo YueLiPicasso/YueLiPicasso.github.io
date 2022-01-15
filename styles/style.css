@@ -1,11 +1,15 @@
 html {
-    font-family: 'ZCOOL XiaoWei', serif;
+    font-family: 'Courgette', cursive;
 }
 
 body {
-    max-width: 800px;
+    width: auto
     margin: 0 auto;
     padding: 0 20px 20px 20px;
+}
+
+[lang="zh-Hans"] {
+    font-family: 'Ma Shan Zheng', cursive;
 }
 
 #toc_container {
