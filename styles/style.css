@@ -18,8 +18,12 @@ a:hover {
     text-decoration: none;
 }
 
+body {
+    background-image: 'none';  
+}
+
 #main {
-    padding: 0 10% 20px 28%;
+    padding: 20px 10% 20px 28%;
 }
 
 .twocol {
@@ -35,13 +39,12 @@ a:hover {
     flex-direction: column;
     position: fixed;
     overflow: scroll;
-    height: 90%;
-    width: 20%;
+    height: 95%;
+    width: 23%;
     align-items: center;
     justify-content: space-around;
-    background-color: ivory;
-    border: thick double #32a1ce;
-    margin: 2% auto auto 2%;
+    opacity: 1;
+    margin: 0 auto auto 2%;
 }
 
 .sidebar ul {
