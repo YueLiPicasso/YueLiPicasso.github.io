@@ -18,12 +18,9 @@ a:hover {
     text-decoration: none;
 }
 
-body {
-    background-image: 'none';  
-}
 
 #main {
-    padding: 20px 20px 20px 400px;
+    padding: 20px 20px 20px 310px;
 }
 
 .twocol {
@@ -39,21 +36,22 @@ body {
     flex-direction: column;
     position: fixed;
     overflow: scroll;
-    height: 95%;
-    width: 300px;
+    height: 700px;
+    width: 200px;
     align-items: center;
     justify-content: space-around;
-    margin: 0;
-    padding: 0;
+    text-align: center;
+    line-height: 200%;
+    padding: 0 0 0 15px;
 }
 
-.sidebar ul {
-    list-style-type: none;
+.sidebar a {
+    display: inline-block;
 }
  
 
 #lastUpdate {
-    font-size: 90%;
+    font-size: 80%;
     color:red;
 }
  
