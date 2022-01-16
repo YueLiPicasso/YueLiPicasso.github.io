@@ -1,7 +1,7 @@
 function fontWithFallback(myfont) {
     switch (myfont) {
-    case 'Choose English Font':
-    case '选择中文字体':
+    case 'Default English Font':
+    case '默认中文字体':
 	return 'serif';
     default:
         return myfont + ', serif';
