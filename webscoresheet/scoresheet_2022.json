@@ -1,0 +1,183 @@
+{ "TITLE" : "Rule 3.992(a) Criminal Punishment Code Scoresheet",
+  "HEADER" : {
+      "DATE OF SENTENCE" : null,
+      "PREPARER'S NAME" : null,
+      "COUNTY" : null,
+      "SENTENCING JUGDE" : null,
+      "NAME (LAST,FIRST,MI.I.)" : null,
+      "DOB" : null,
+      "DC #" : null,
+      "RACE" : null,
+      "GENDER" : null,
+      "PRIMARY OFF. DATE" : null,
+      "PRIMARY DOCKET #" : null,
+      "PLEA OR TRIAL" : null
+  },
+  "PRIMARY OFFENSE" : {
+      "QUALIFIER" : null,
+      "FELONY DEGREE" : null,
+      "F.S.#" : null,
+      "DESCRIPTION" : null,
+      "OFFENSE LEVEL" : null,
+      "POINTS" : null
+  },
+  "ADDITIONAL OFFENSE(S)" :
+  {"LISTING" :
+   [{ "DOCKET#" : null,
+      "FEL\/MM DEGREE" : null,
+      "F.S.#" : null,
+      "OFFENSE LEVEL" : null,
+      "QUALIFIER" : null,
+      "COUNTS" : null,
+      "POINTS" : null,
+      "TOTAL" : null,
+      "DESCRIPTION" : null
+    },
+    { "DOCKET#" : null,
+      "FEL\/MM DEGREE" : null,
+      "F.S.#" : null,
+      "OFFENSE LEVEL" : null,
+      "QUALIFIER" : null,
+      "COUNTS" : null,
+      "POINTS" : null,
+      "TOTAL" : null,
+      "DESCRIPTION" : null
+    },
+    { "DOCKET#" : null,
+      "FEL\/MM DEGREE" : null,
+      "F.S.#" : null,
+      "OFFENSE LEVEL" : null,
+      "QUALIFIER" : null,
+      "COUNTS" : null,
+      "POINTS" : null,
+      "TOTAL" : null,
+      "DESCRIPTION" : null
+    },
+    { "DOCKET#" : null,
+      "FEL\/MM DEGREE" : null,
+      "F.S.#" : null,
+      "OFFENSE LEVEL" : null,
+      "QUALIFIER" : null,
+      "COUNTS" : null,
+      "POINTS" : null,
+      "TOTAL" : null,
+      "DESCRIPTION" : null
+    }],
+   "TOTAL" : null
+  },
+  "PRIOR CAPITAL FELONY" : null,
+  "VICTIM INJURY" : {
+      "2ND DEGREE MURDER" : { "NUMBER" : null, "TOTAL" : null },
+      "DEATH" : { "NUMBER" : null, "TOTAL" : null },
+      "SEVERE" : { "NUMBER" : null, "TOTAL" : null },
+      "MODERATE" : { "NUMBER" : null, "TOTAL" : null },
+      "SLIGHT" : { "NUMBER" : null, "TOTAL" : null },
+      "SEX PENETRATION" : { "NUMBER" : null, "TOTAL" : null },
+      "SEX CONTACT" : { "NUMBER" : null, "TOTAL" : null },
+      "TOTAL" : null
+  },
+  "PRIOR RECORD" : {
+      "LISTING" : [
+	  {"FEL\/MM DEGREE" : null,
+	   "F.S.#" : null,
+	   "OFFENSE LEVEL" : null,
+	   "QUALIFIER" : null,
+	   "DESCRIPTION" : null,
+	   "NUMBER" : null,
+	   "POINTS" : null,
+	   "TOTAL" : null},
+	  {"FEL\/MM DEGREE" : null,
+	   "F.S.#" : null,
+	   "OFFENSE LEVEL" : null,
+	   "QUALIFIER" : null,
+	   "DESCRIPTION" : null,
+	   "NUMBER" : null,
+	   "POINTS" : null,
+	   "TOTAL" : null}
+      ],
+      "TOTAL" : null
+  },
+  "LEGAL STATUS VIOLATION" : {
+      "ESCAPE" : null,
+      "FLEEING" : null,
+      "FAILURE TO APPEAR" : null,
+      "SUPERSEDEAS BOND" : null,
+      "INCARCERATION" : null,
+      "PRETRIAL INTERVENTION OR DIVERSION PROGRAM" : null,
+      "COURT IMPOSED OR POST PRISON RELEASE COMMUNITY SUPERVISION RESULTING IN A CONVICTION" : null
+  },
+  "COMMUNITY SANCTION VIOLATION BEFORE THE COURT FOR SENTENCING" : {
+      "PROBATION" : null,
+      "COMMUNITY CONTROL" : null,
+      "PRETRIAL INTERVENTION OR DIVERSION" : null,
+      "ANY VIOLATION" :
+      { "CHECK" : null,
+	"SUCCESSIVE VIOLATION" : null,
+	"NOTE" : "OTHER THAN NEW FELONY CONVICTION"},
+      "NEW FELONY CONVICTION" :
+      { "CHECK" : null,
+	"SUCCESSIVE VIOLATION" : null,
+	"NOTE" : "NEW OFFENSE RESULTS IN CONVICTION BEFORE OR AT THE SAME TIME AS SENTENCE FOR VIOLATION OF PROBATION"},
+      "VFOSC" :
+      { "CHECK" : null,
+	"SUCCESSIVE VIOLATION" : null,
+	"NOTE" : "FOR A VIOLENT FELONY OFFENDER OF SPECIAL CONCERN WHEN THE VIOLATION IS NOT BASED SOLELY ON FAILURE TO PAY COSTS, FINES, OR RESTITUTION"},
+      "NEW FELONY CONVICTION VFOSC" :
+      { "CHECK" : null,
+	"SUCCESSIVE VIOLATION" : null,
+	"NOTE" : "FOR A VIOLENT FELONY OFFENDER OF SPECIAL CONCERN IF NEW OFFENSE RESULTS IN A CONVICTION BEFORE OR AT THE SAME TIME FOR VIOLATION OF PROBATION"}      
+  },
+  "FIREARM\/SEMI-AUTOMATIC OR MACHINE GUN" : null,
+  "PRIOR SERIOUS FELONY" : null,
+  "SUBTOTAL SENTENCE POINTS" : null,
+  "ENHANCEMENTS" :
+  { "NOTE" : "ONLY IF THE PRIMARY OFFENSE QUALIFIES FOR ENHANCEMENT",
+    "LAW ENF. PROTECT." : {"1.5" : null, "2.0" : null, "2.5" : null},
+    "DRUG TRAFFICKER" : null,
+    "MOTOR VEHICLE THEFT" : null,
+    "CRIMINAL GANG OFFENSE" : null,
+    "DOMESTIC VIOLENCE IN THE PRESENCE OF RELATED CHILD" : null,
+    "ADULT-ON-MINOR SEX OFFENSE" : null
+  },
+  "ENHANCED SUBTOTAL SENTENCE POINTS" : null,
+  "TOTAL SENTENCE POINTS" : null,
+  "IF TOTAL SENTENCE POINTS GE 44" : {"TOTAL" : null, "MINUS 28" : null, "TIMES .75" : null},
+  "MAXIMUM SENTENCE IN YEARS" : null,
+  "TOTAL SENTENCE IMPOSED" : {
+      "STATE PRISON" : null,
+      "LIFE" : null,
+      "COUNTY JAIL" : null,
+      "TIME SERVED" : null,
+      "COMMUNITY CONTROL" : null,
+      "PROBATION" : null,
+      "MODIFIED" : null,
+      "TERM" : {"YEAR" : null, "MONTH" : null, "DAY" : null},
+      "SENTENCED AS" : {
+	  "HABITUAL OFFENDER" : null,
+	  "HABITUAL VIOLENT OFFENDER" : null,
+	  "VIOLENT CAREER CRIMINAL" : null,
+	  "PRISON RELEASE REOFFENDER" : null,
+	  "MANDATORY MINIMUM APPLIES" : null
+      },
+      "MITIGATED DEPARTURE" : null,
+      "PLEA BARGAIN" : null,
+      "PRISON DIVERSION PROGRAM" : null,
+      "OTHER REASON" : {
+	  "WRITTEN" : null,
+	  "R1" : {"CHECK" : null, "NOTE" : "Legitimate, uncoerced plea bargain."},
+	  "R2" : {"CHECK" : null, "NOTE" : "The defendant was an accomplice to the offense and was a relatively minor participant in the criminal conduct."},
+	  "R3" : {"CHECK" : null, "NOTE" : "The capacity of the defendant to appreciate the criminal nature of the conduct or to conform that conduct to the requirements of law was substantially impaired."},
+	  "R4" : {"CHECK" : null, "NOTE" : "The defendant requires specialized treatment for a mental disorder that is unrelated to substance abuse or addiction, or for a physical disability, and the defendant is amenable to treatment."},
+	  "R5" : {"CHECK" : null, "NOTE" : "The need for payment of restitution to the victim outweighs the need for a prison sentence."},
+	  "R6" : {"CHECK" : null, "NOTE" : "The victim was an initiator, willing participant, aggressor, or provoker of the incident."},
+	  "R7" : {"CHECK" : null, "NOTE" : "The defendant acted under extreme duress or under the domination of another person."},
+	  "R8" : {"CHECK" : null, "NOTE" : "Before the identity of the defendant was determined, the victim was substantially compensated ."},
+	  "R9" : {"CHECK" : null, "NOTE" : "The defendant cooperated with the State to resolve the current offense or any other offense."},
+	  "R10" : {"CHECK" : null, "NOTE" : "The offense was committed in an unsophisticated manner and was an isolated incident for which the defendant has shown remorse."},
+	  "R11" : {"CHECK" : null, "NOTE" : "At the time of the offense the defendant was too young to appreciate the consequences of the offense."},
+	  "R12" : {"CHECK" : null, "NOTE" : "The defendant is to be sentenced as a youthful offender."},
+	  "R13" : {"CHECK" : null, "NOTE" : "The defendant is amenable to the services of a postadjudicatory treatment-based drug court program and is otherwise qualified to participate in the program."},
+	  "R14" : {"CHECK" : null, "NOTE" : "The defendant was making a good faith effort to obtain or provide medical assistance for an individual experiencing a drug-related overdose."}
+      }
+  }
+}
