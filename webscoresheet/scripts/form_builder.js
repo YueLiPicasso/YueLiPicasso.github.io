@@ -1,4 +1,4 @@
-// LI YUE @ 29 NOV 2022 @ HAINAN, CHINA
+// LI YUE @ 01 Dec 2022 @ HAINAN, CHINA
 
 // global counter for additional offenses and prior records
 let ao_count = 0;
@@ -161,17 +161,28 @@ const fieldLabelText_PO = {
 const fieldId_AOTOP = {
     total : "TT_AOTOP",
 };
+const fieldIdPrefix_AO = {
+    docket      : "DC_AO",
+    degree      : "DEG_AO",
+    fsr         : "FSR_AO",
+    level       : "OL_AO",
+    qualifier   : "QU_AO",
+    counts      : "CNT_AO",
+    points      : "PNT_AO",
+    total       : "TT_AO",
+    description : "DES_AO",
+};
 function fieldId_AO () {
     const ao_fieldId = {
-	docket      : "DC_AO"  + ao_count_str,
-	degree      : "DEG_AO" + ao_count_str,
-	fsr         : "FSR_AO" + ao_count_str,
-	level       : "OL_AO"  + ao_count_str,
-	qualifier   : "QU_AO"  + ao_count_str,
-	counts      : "CNT_AO" + ao_count_str,
-	points      : "PNT_AO" + ao_count_str,
-	total       : "TT_AO"  + ao_count_str,
-	description : "DES_AO" + ao_count_str,
+	docket      : fieldIdPrefix_AO.docket      + ao_count_str,
+	degree      : fieldIdPrefix_AO.degree      + ao_count_str,
+	fsr         : fieldIdPrefix_AO.fsr         + ao_count_str,
+	level       : fieldIdPrefix_AO.level       + ao_count_str,
+	qualifier   : fieldIdPrefix_AO.qualifier   + ao_count_str,
+	counts      : fieldIdPrefix_AO.counts      + ao_count_str,
+	points      : fieldIdPrefix_AO.points      + ao_count_str,
+	total       : fieldIdPrefix_AO.total       + ao_count_str,
+	description : fieldIdPrefix_AO.description + ao_count_str,
     };
     return ao_fieldId;
 }
@@ -205,35 +216,46 @@ const fieldId_VI = {
     topTotal       : "TT_VI",
 };
 const fieldLabelText_VI = {
-    sec_murder_num : "2nd Degree Murder (number of)" + label_text_suffix,
+    sec_murder_num : "2nd Degree Murder (Number)"    + label_text_suffix,
     sec_murder_tol : label_text_prefix + "x 240 ="   + label_text_suffix,
-    death_num      : "Death (number of)"             + label_text_suffix,
+    death_num      : "Death (Number)"                + label_text_suffix,
     death_tol      : label_text_prefix + "x 120 ="   + label_text_suffix,
-    severe_num     : "Severe (number of)"            + label_text_suffix,
+    severe_num     : "Severe (Number)"               + label_text_suffix,
     severe_tol     : label_text_prefix + "x 40 ="    + label_text_suffix,
-    moderate_num   : "Moderate (number of)"          + label_text_suffix,
+    moderate_num   : "Moderate (Number)"             + label_text_suffix,
     moderate_tol   : label_text_prefix + "x 18 ="    + label_text_suffix,
-    slight_num     : "Slight (number of)"            + label_text_suffix,
+    slight_num     : "Slight (Number)"               + label_text_suffix,
     slight_tol     : label_text_prefix + "x 4 ="     + label_text_suffix,
-    xp_num         : "Sex Penetration (number of)"   + label_text_suffix,
+    xp_num         : "Sex Penetration (Number)"      + label_text_suffix,
     xp_tol         : label_text_prefix + "x 80 ="    + label_text_suffix,
-    xc_num         : "Sex Contact (number of)"       + label_text_suffix,
+    xc_num         : "Sex Contact (Number)"          + label_text_suffix,
     xc_tol         : label_text_prefix + "x 40 ="    + label_text_suffix,
 };
 const fieldId_PRTOP = {
     total : "TT_PRTOP",
 };
+const fieldIdPrefix_PR = {
+    docket      : "DC_PR",
+    degree      : "DEG_PR",
+    fsr         : "FSR_PR",
+    level       : "OL_PR",
+    qualifier   : "QU_PR",
+    counts      : "CNT_PR",
+    points      : "PNT_PR",
+    total       : "TT_PR",
+    description : "DES_PR",
+};
 function fieldId_PR () {
     const pr_fieldId = {
-	docket      : "DC_PR"  + pr_count_str,
-	degree      : "DEG_PR" + pr_count_str,
-	fsr         : "FSR_PR" + pr_count_str,
-	level       : "OL_PR"  + pr_count_str,
-	qualifier   : "QU_PR"  + pr_count_str,
-	counts      : "CNT_PR" + pr_count_str,
-	points      : "PNT_PR" + pr_count_str,
-	total       : "TT_PR"  + pr_count_str,
-	description : "DES_PR" + pr_count_str,
+	docket      : fieldIdPrefix_PR.docket      + pr_count_str,
+	degree      : fieldIdPrefix_PR.degree      + pr_count_str,
+	fsr         : fieldIdPrefix_PR.fsr         + pr_count_str,
+	level       : fieldIdPrefix_PR.level       + pr_count_str,
+	qualifier   : fieldIdPrefix_PR.qualifier   + pr_count_str,
+	counts      : fieldIdPrefix_PR.counts      + pr_count_str,
+	points      : fieldIdPrefix_PR.points      + pr_count_str,
+	total       : fieldIdPrefix_PR.total       + pr_count_str,
+	description : fieldIdPrefix_PR.description + pr_count_str,
     };
     return pr_fieldId;
 }
@@ -471,6 +493,7 @@ const mi_top  = document.getElementById("MI");     // mitigating circum. contain
 function style_input_field(param) {
     const val =
 	  "border:none;" +
+	  "font-size:100%;" +
 	  "border-bottom:1px solid;" +
 	  "background-color:white;" +
 	  "padding:4px 0px;" +
@@ -620,6 +643,13 @@ function remove_field_and_associates(fieldId,delim) {
 	document.getElementById(hrl_id_prefix + label_id_prefix + fieldId).remove();
     }
 }
+function setTextFieldDefault (elemId,defVal,ro) {
+    const field = document.getElementById(elemId);
+    field.setAttribute("value",defVal);
+    if (ro == "readonly") {	
+	field.setAttribute("readonly","readonly");
+    }
+}
 // fieldset builders
 function preamble () {
     insert_legend(pa_top,legend_text.preamble);
@@ -671,7 +701,7 @@ function primary_off () {
     insert_option(degree_value_FL,degree_text_FL,"",degree_field_PO);
     insert_option(degree_value_F1,degree_text_F1,"",degree_field_PO);
     insert_option(degree_value_F2,degree_text_F2,"",degree_field_PO);
-    insert_option(degree_value_F3,degree_text_F3,"selected",degree_field_PO);
+    insert_option(degree_value_F3,degree_text_F3,"selected",degree_field_PO); // Default PO degree : 3rd F. 
     // Florida statute reference
     insert_field_label(po_top,fieldId_PO.fsr,fieldLabelText_PO.fsr,"");
     insert_text_field(po_top,fieldId_PO.fsr);
@@ -681,7 +711,7 @@ function primary_off () {
     // offense level
     insert_field_label(po_top,fieldId_PO.level,fieldLabelText_PO.level,"");
     const level_field_PO = insert_dropdown(po_top,fieldId_PO.level);
-    insert_option("1","1","",level_field_PO);
+    insert_option("1","1","selected",level_field_PO); // default PO level : 1
     insert_option("2","2","",level_field_PO);
     insert_option("3","3","",level_field_PO);
     insert_option("4","4","",level_field_PO);
@@ -691,9 +721,12 @@ function primary_off () {
     insert_option("8","8","",level_field_PO);
     insert_option("9","9","",level_field_PO);
     insert_option("10","10","",level_field_PO);
+    // level field onchange Event : update the points field
+    level_field_PO.setAttribute("onchange","levelChange_PO()");
     // points for one count of the primary offense
     insert_field_label(po_top,fieldId_PO.points,fieldLabelText_PO.points,"");
     insert_text_field(po_top,fieldId_PO.points);
+    setTextFieldDefault(fieldId_PO.points,"4","readonly"); // default PO points : level 1 points = 4, read-only field
     // text note
     insert_span(po_top,l2p_text.po);
 }
@@ -702,7 +735,8 @@ function additional_off () {
     // total for all A.O.
     insert_field_label(ao_top,fieldId_AOTOP.total,fieldLabelText_AO.topTotal,"");
     insert_text_field_NB(ao_top,fieldId_AOTOP.total);
-
+    setTextFieldDefault(fieldId_AOTOP.total,"0.0","readonly"); // default is 0
+    
     new_emsp(ao_top);
     
     const add_butt = document.createElement("input");
@@ -726,53 +760,71 @@ function additional_off () {
     insert_span(ao_top,l2p_text.ao);
 }
 function victim_injury () {
+    // create legend and fields
     insert_legend(vi_top,legend_text.vi);
-    
     insert_field_label(vi_top,fieldId_VI.sec_murder_num,fieldLabelText_VI.sec_murder_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.sec_murder_num);    
     insert_field_label(vi_top,fieldId_VI.sec_murder_tol,fieldLabelText_VI.sec_murder_tol,"");
     insert_text_field(vi_top,fieldId_VI.sec_murder_tol);
-    
     insert_field_label(vi_top,fieldId_VI.death_num,fieldLabelText_VI.death_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.death_num);
     insert_field_label(vi_top,fieldId_VI.death_tol,fieldLabelText_VI.death_tol,"");
     insert_text_field(vi_top,fieldId_VI.death_tol);
-
     insert_field_label(vi_top,fieldId_VI.severe_num,fieldLabelText_VI.severe_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.severe_num);
     insert_field_label(vi_top,fieldId_VI.severe_tol,fieldLabelText_VI.severe_tol,"");
     insert_text_field(vi_top,fieldId_VI.severe_tol);
-
     insert_field_label(vi_top,fieldId_VI.moderate_num,fieldLabelText_VI.moderate_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.moderate_num);
     insert_field_label(vi_top,fieldId_VI.moderate_tol,fieldLabelText_VI.moderate_tol,"");
     insert_text_field(vi_top,fieldId_VI.moderate_tol);
-
     insert_field_label(vi_top,fieldId_VI.slight_num,fieldLabelText_VI.slight_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.slight_num);
     insert_field_label(vi_top,fieldId_VI.slight_tol,fieldLabelText_VI.slight_tol,"");
     insert_text_field(vi_top,fieldId_VI.slight_tol);
-
     insert_field_label(vi_top,fieldId_VI.xp_num,fieldLabelText_VI.xp_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.xp_num);
     insert_field_label(vi_top,fieldId_VI.xp_tol,fieldLabelText_VI.xp_tol,"");
     insert_text_field(vi_top,fieldId_VI.xp_tol);
-
     insert_field_label(vi_top,fieldId_VI.xc_num,fieldLabelText_VI.xc_num,"");
     insert_text_field_NB(vi_top,fieldId_VI.xc_num);
     insert_field_label(vi_top,fieldId_VI.xc_tol,fieldLabelText_VI.xc_tol,"");
     insert_text_field(vi_top,fieldId_VI.xc_tol);
-
     // total for victim injury
     insert_field_label(vi_top,fieldId_VI.topTotal,total_text + label_text_suffix,"");
     insert_text_field(vi_top,fieldId_VI.topTotal);
+    // default values
+    setTextFieldDefault(fieldId_VI.sec_murder_num,"0","");
+    setTextFieldDefault(fieldId_VI.sec_murder_tol,"0","readonly");
+    setTextFieldDefault(fieldId_VI.death_num,     "0","");
+    setTextFieldDefault(fieldId_VI.death_tol,     "0","readonly");
+    setTextFieldDefault(fieldId_VI.severe_num,    "0","");
+    setTextFieldDefault(fieldId_VI.severe_tol,    "0","readonly");
+    setTextFieldDefault(fieldId_VI.moderate_num,  "0","");
+    setTextFieldDefault(fieldId_VI.moderate_tol,  "0","readonly");
+    setTextFieldDefault(fieldId_VI.slight_num,    "0","");
+    setTextFieldDefault(fieldId_VI.slight_tol,    "0","readonly");
+    setTextFieldDefault(fieldId_VI.xp_num,        "0","");
+    setTextFieldDefault(fieldId_VI.xp_tol,        "0","readonly");
+    setTextFieldDefault(fieldId_VI.xc_num,        "0","");
+    setTextFieldDefault(fieldId_VI.xc_tol,        "0","readonly");
+    setTextFieldDefault(fieldId_VI.topTotal,      "0","readonly");
+    // on-change events handling
+    document.getElementById(fieldId_VI.sec_murder_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.death_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.severe_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.moderate_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.slight_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.xp_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.xc_num).setAttribute("onchange","refresh_VI()");
 }
 function prior_record () {
     insert_legend(pr_top,legend_text.pr);
     // total for all P.R.
     insert_field_label(pr_top,fieldId_PRTOP.total,fieldLabelText_PR.topTotal,"");
     insert_text_field_NB(pr_top,fieldId_PRTOP.total);
-
+    setTextFieldDefault(fieldId_PRTOP.total,"0.0","readonly"); // default to 0.0, read-only
+    
     new_emsp(pr_top);
     
     const add_butt = document.createElement("input");
@@ -800,7 +852,7 @@ function add_AOP(param) {
     let fieldId = undefined;
     let top = undefined;
     let label = undefined;
-    
+    // setup common names
     if (param == "AO") {
 	ao_count += 1;
 	ao_count_str = ao_count.toString();
@@ -812,8 +864,7 @@ function add_AOP(param) {
 	pr_count_str = pr_count.toString();
 	fieldId = fieldId_PR ();
 	top = pr_top;
-	label = fieldLabelText_PR;
-    }    
+	label = fieldLabelText_PR; }    
     // create short names
     const docket = fieldId.docket;
     const degree = fieldId.degree;
@@ -824,7 +875,6 @@ function add_AOP(param) {
     const points = fieldId.points;
     const total = fieldId.total;
     const description = fieldId.description;
-
     // create and add fields
     // docket
     insert_field_label(top,docket,label.docket,"hr");
@@ -835,9 +885,9 @@ function add_AOP(param) {
     insert_option(degree_value_FL,degree_text_FL,"",degree_field);
     insert_option(degree_value_F1,degree_text_F1,"",degree_field);
     insert_option(degree_value_F2,degree_text_F2,"",degree_field);
-    insert_option(degree_value_F3,degree_text_F3,"selected",degree_field);
+    insert_option(degree_value_F3,degree_text_F3,"",degree_field);
     insert_option(degree_value_M1,degree_text_M1,"",degree_field);
-    insert_option(degree_value_M2,degree_text_M2,"",degree_field);
+    insert_option(degree_value_M2,degree_text_M2,"selected",degree_field); // match default level M
     // Florida statute reference
     insert_field_label(top,fsr,label.fsr,"");
     insert_text_field(top,fsr);
@@ -847,7 +897,7 @@ function add_AOP(param) {
     // offense level
     insert_field_label(top,level,label.level,"");
     const level_field = insert_dropdown(top,level);
-    insert_option("1","1","",level_field);
+    insert_option("1","1","",level_field); 
     insert_option("2","2","",level_field);
     insert_option("3","3","",level_field);
     insert_option("4","4","",level_field);
@@ -857,7 +907,10 @@ function add_AOP(param) {
     insert_option("8","8","",level_field);
     insert_option("9","9","",level_field);
     insert_option("10","10","",level_field);
-    insert_option("M","M","",level_field);
+    insert_option("M","M","selected",level_field); // default level is M
+    // level onchange event
+    if (param == "AO") { level_field.setAttribute("onchange","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
+    if (param == "PR") { level_field.setAttribute("onchange","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
     // qualifier
     insert_field_label(top,qualifier,label.qualifier,"");
     const qualifier_field = insert_dropdown(top,qualifier);
@@ -869,12 +922,21 @@ function add_AOP(param) {
     // counts
     insert_field_label(top,counts,label.counts,"");
     insert_text_field(top,counts);
-    // points for one count of the additional offense
+    setTextFieldDefault(counts,"1","");  // default counts is 1
+    // counts onchange event
+    const counts_field = document.getElementById(counts);
+    if (param == "AO") { counts_field.setAttribute("onchange","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
+    if (param == "PR") { counts_field.setAttribute("onchange","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
+    // points for one count of the offense
     insert_field_label(top,points,label.points,"");
     insert_text_field(top,points);
-    // total points of the additional offense
+    setTextFieldDefault(points,"0.2","readonly"); // default points is for level M : 0.2; read-only field. Note that only level M points are the same for AO and PR, but not other levels
+    // total points of the item
     insert_field_label(top,total,label.total,"");
     insert_text_field(top,total);
+    setTextFieldDefault(total,"0.2","readonly"); // default total is one count of level M; read-only
+    // refresh top total for AOP
+    refreshTotal_AOP(param);
 }
 function remove_AOP(param) {
     let fieldId = undefined;
@@ -907,6 +969,7 @@ function remove_AOP(param) {
 	    pr_count = count - 1;
 	    pr_count_str = pr_count.toString();
 	}
+	refreshTotal_AOP(param);
     }
 }
 function legal_status () {
@@ -929,7 +992,7 @@ function cs_violation () {
     insert_checkbox_NB(csv_top,fieldId_CSV.tcc,fieldLabelText_CSV.tcc);
     new_emsp(csv_top);
     insert_checkbox(csv_top,fieldId_CSV.tpid,fieldLabelText_CSV.tpid);
-      
+    
     insert_checkbox_NB(csv_top,fieldId_CSV.csix,fieldLabelText_CSV.csix);
     insert_text_field_NB(csv_top,fieldId_CSV.six);
     insert_field_label(csv_top,fieldId_CSV.six,fieldLabelText_CSV.six,"br");
@@ -1034,7 +1097,7 @@ function sent_imposed () {
     insert_checkbox_NB(tsi_top,fieldId_TSI.check_cj,fieldLabelText_TSI.check_cj);
     new_nbsp(tsi_top);
     insert_checkbox_NB(tsi_top,fieldId_TSI.check_ts,fieldLabelText_TSI.check_ts);
-     new_nbsp(tsi_top);
+    new_nbsp(tsi_top);
     insert_text_field_NB(tsi_top,fieldId_TSI.years_r2);
     new_nbsp(tsi_top);
     insert_field_label(tsi_top,fieldId_TSI.years_r2,fieldLabelText_TSI.years_r2,"");
@@ -1060,12 +1123,11 @@ function sent_imposed () {
     insert_text_field_NB(tsi_top,fieldId_TSI.days_r3);
     new_nbsp(tsi_top);
     insert_field_label(tsi_top,fieldId_TSI.days_r3,fieldLabelText_TSI.days_r3,"br");
-   
-
+    
     insert_checkbox_NB(tsi_top,fieldId_TSI.check_pr,fieldLabelText_TSI.check_pr);
     new_nbsp(tsi_top);
     insert_checkbox_NB(tsi_top,fieldId_TSI.check_md,fieldLabelText_TSI.check_md);
-     new_nbsp(tsi_top);
+    new_nbsp(tsi_top);
     insert_text_field_NB(tsi_top,fieldId_TSI.years_r4);
     new_nbsp(tsi_top);
     insert_field_label(tsi_top,fieldId_TSI.years_r4,fieldLabelText_TSI.years_r4,"");
@@ -1077,7 +1139,7 @@ function sent_imposed () {
     insert_text_field_NB(tsi_top,fieldId_TSI.days_r4);
     new_nbsp(tsi_top);
     insert_field_label(tsi_top,fieldId_TSI.days_r4,fieldLabelText_TSI.days_r4,"br");
-   
+    
     const p1 = document.createTextNode(tsi_1_text);
     tsi_top.appendChild(p1);
     insert_checkbox_NB(tsi_top,fieldId_TSI.check_ho,fieldLabelText_TSI.check_ho);
@@ -1131,3 +1193,196 @@ total_points();    // Build total Sentence Points fields
 sentence_comp();   // Build sentence computation fields
 sent_imposed();    // Build total sentence imposed fields
 mitigating();      // Build mitigating circum. fields
+
+// Event handlers
+
+function levelChange_PO () {
+    const level_field_PO = document.getElementById(fieldId_PO.level);
+    const points_field_PO = document.getElementById(fieldId_PO.points);
+    let points = undefined;
+    switch (level_field_PO.value) {
+    case "1":
+	points = "4";
+	break;
+    case "2":
+	points = "10";
+	break;
+    case "3":
+	points = "16";
+	break;
+    case "4":
+	points = "22";
+	break;
+    case "5":
+	points = "28";
+	break;
+    case "6":
+	points = "36";
+	break;
+    case "7":
+	points = "56";
+	break;
+    case "8":
+	points = "74";
+	break;
+    case "9":
+	points = "92";
+	break;
+    case "10":
+	points = "116";
+    }
+    points_field_PO.value = points;
+}
+function levelnCountsChange_AOP(param, cnt_str) {
+    // possibly changed fields
+    let level_field  = undefined;
+    let counts_field = undefined;
+    // possibly influenced fields
+    let points_field = undefined;
+    let total_field  = undefined;
+    // new values
+    let points = undefined; // to store string
+    let points_num = undefined; // to store number
+    let total  = undefined;
+    let total_num  = undefined;
+    
+    if (param == "AO") {
+	level_field  = document.getElementById(fieldIdPrefix_AO.level  + cnt_str);
+	counts_field = document.getElementById(fieldIdPrefix_AO.counts + cnt_str);
+	points_field = document.getElementById(fieldIdPrefix_AO.points + cnt_str);
+	total_field  = document.getElementById(fieldIdPrefix_AO.total  + cnt_str);
+	switch (level_field.value) {
+	case "1":
+	    points = "0.7";
+	    break;
+	case "2":
+	    points = "1.2";
+	    break;
+	case "3":
+	    points = "2.4";
+	    break;
+	case "4":
+	    points = "3.6";
+	    break;
+	case "5":
+	    points = "5.4";
+	    break;
+	case "6":
+	    points = "18";
+	    break;
+	case "7":
+	    points = "28";
+	    break;
+	case "8":
+	    points = "37";
+	    break;
+	case "9":
+	    points = "46";
+	    break;
+	case "10":
+	    points = "58";
+	    break;
+	case "M":
+	    points = "0.2";
+	}
+    }
+    if (param == "PR") {
+	level_field  = document.getElementById(fieldIdPrefix_PR.level  + cnt_str);
+	counts_field = document.getElementById(fieldIdPrefix_PR.counts + cnt_str);
+	points_field = document.getElementById(fieldIdPrefix_PR.points + cnt_str);
+	total_field  = document.getElementById(fieldIdPrefix_PR.total  + cnt_str);
+	switch (level_field.value) {
+	case "1":
+	    points = "0.5";
+	    break;
+	case "2":
+	    points = "0.8";
+	    break;
+	case "3":
+	    points = "1.6";
+	    break;
+	case "4":
+	    points = "2.4";
+	    break;
+	case "5":
+	    points = "3.6";
+	    break;
+	case "6":
+	    points = "9";
+	    break;
+	case "7":
+	    points = "14";
+	    break;
+	case "8":
+	    points = "19";
+	    break;
+	case "9":
+	    points = "23";
+	    break;
+	case "10":
+	    points = "29";
+	    break;
+	case "M":
+	    points = "0.2";
+	}
+    }
+    // compute new field values 
+    points_num = parseFloat(points); // current points as number
+    const counts_num = parseFloat(counts_field.value); // current counts as number
+    // if counts is invalid input , NaN would propagate to total
+    total_num = counts_num * points_num;
+    // round to one decimal because count is always an integer and points has at most one decimal
+    total = total_num.toFixed(1).toString();
+    points_field.value = points;     // update points field
+    total_field.value = total;       // update total field
+
+    refreshTotal_AOP(param);
+}
+// refresh AO or PR total points upon adding/removing new items or modifying the level or counts of existing items
+function refreshTotal_AOP (param) {
+    let subtotal = 0;
+    let topTotal = undefined;
+    if (param == "AO") {
+	topTotal = document.getElementById(fieldId_AOTOP.total); // get the field elem
+	// accumulate on the subtotal
+	for (let i = 1; i <= ao_count; i++) {
+	    const item = document.getElementById(fieldIdPrefix_AO.total + i.toString());
+	    const item_value = parseFloat(item.value); // a float num
+	    subtotal += item_value; 
+	}
+    }
+    if (param == "PR") {
+	topTotal = document.getElementById(fieldId_PRTOP.total); // get the field elem
+	// accumulate on the subtotal
+	for (let i = 1; i <= pr_count; i++) {
+	    const item = document.getElementById(fieldIdPrefix_PR.total + i.toString());
+	    const item_value = parseFloat(item.value); // a float num
+	    subtotal += item_value; 
+	}
+    }
+    topTotal.value = subtotal.toFixed(1).toString(); // refresh 
+}
+// change any Number field of VI influences the subtotal and total 
+function refresh_VI () {
+    // compute new subtotals
+    const st1 = parseInt(document.getElementById(fieldId_VI.sec_murder_num).value) * 240;
+    const st2 = parseInt(document.getElementById(fieldId_VI.death_num).value)      * 120;
+    const st3 = parseInt(document.getElementById(fieldId_VI.severe_num).value)     * 40;
+    const st4 = parseInt(document.getElementById(fieldId_VI.moderate_num).value)   * 18;
+    const st5 = parseInt(document.getElementById(fieldId_VI.slight_num).value)     * 4;
+    const st6 = parseInt(document.getElementById(fieldId_VI.xp_num).value)         * 80;
+    const st7 = parseInt(document.getElementById(fieldId_VI.xc_num).value)         * 40;
+    // assign new subtotals
+    document.getElementById(fieldId_VI.sec_murder_tol).value = st1.toString();
+    document.getElementById(fieldId_VI.death_tol).value      = st2.toString();
+    document.getElementById(fieldId_VI.severe_tol).value     = st3.toString();
+    document.getElementById(fieldId_VI.moderate_tol).value   = st4.toString();
+    document.getElementById(fieldId_VI.slight_tol).value     = st5.toString();
+    document.getElementById(fieldId_VI.xp_tol).value         = st6.toString();
+    document.getElementById(fieldId_VI.xc_tol).value         = st7.toString();
+    // new VI-toptotal: compute and assign
+    document.getElementById(fieldId_VI.topTotal).value =
+	(st1 + st2 + st3 + st4 + st5 + st6 + st7).toString();
+}
+
+
