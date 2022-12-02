@@ -1,64 +1,64 @@
 // LI YUE @ 01 Dec 2022 @ HAINAN, CHINA
 
 // global counter for additional offenses and prior records
-let ao_count = 0;
+let ao_count     = 0;
 let ao_count_str = undefined; 
-let pr_count = 0;
-let pr_count_str = undefined; 
+let pr_count     = 0;
+let pr_count_str = undefined;
 // commonly used strings
-const brk_id_prefix = "BR_AFTER_";
-const hrl_id_prefix = "HR_BEFORE_";
-const label_id_prefix = "LABEL_OF_";
+const brk_id_prefix     = "BR_AFTER_";
+const hrl_id_prefix     = "HR_BEFORE_";
+const label_id_prefix   = "LABEL_OF_";
 const label_text_suffix = " ";
 const label_text_prefix = " ";
 // interface text macros
-const add_butt_text = "ADD";
-const rm_butt_text = "REMOVE";
-const race_text_B = "B";
-const race_value_B = "B";
-const race_text_W = "W";
-const race_value_W = "W";
-const race_text_O = "Other";
-const race_value_O = "OTHER";
-const gender_text_F = "F";
-const gender_value_F = "F";
-const gender_text_M = "M";
-const gender_value_M = "M";
-const pot_text_P = "Plea";
-const pot_value_P = "PLEA";
-const pot_text_T = "Trial";
-const pot_value_T = "TRIAL";
-const qualifier_text_A = "Attempt";
+const add_butt_text     = "ADD";
+const rm_butt_text      = "REMOVE";
+const race_text_B       = "B";
+const race_value_B      = "B";
+const race_text_W       = "W";
+const race_value_W      = "W";
+const race_text_O       = "Other";
+const race_value_O      = "OTHER";
+const gender_text_F     = "F";
+const gender_value_F    = "F";
+const gender_text_M     = "M";
+const gender_value_M    = "M";
+const pot_text_P        = "Plea";
+const pot_value_P       = "PLEA";
+const pot_text_T        = "Trial";
+const pot_value_T       = "TRIAL";
+const qualifier_text_A  = "Attempt";
 const qualifier_value_A = "A";
-const qualifier_text_S = "Solicitation";
+const qualifier_text_S  = "Solicitation";
 const qualifier_value_S = "S";
-const qualifier_text_C = "Conspiracy";
+const qualifier_text_C  = "Conspiracy";
 const qualifier_value_C = "C";
-const qualifier_text_R = "Reclassification";
+const qualifier_text_R  = "Reclassification";
 const qualifier_value_R = "R";
-const qualifier_text_N = "Not Applicable";
+const qualifier_text_N  = "Not Applicable";
 const qualifier_value_N = "NA";
-const degree_text_FL = "Life F.";
-const degree_value_FL = "FL";
-const degree_text_F1 = "1st F.";
-const degree_value_F1 = "F1";
-const degree_text_F2 = "2nd F.";
-const degree_value_F2 = "F2";
-const degree_text_F3 = "3rd F.";
-const degree_value_F3 = "F3";
-const degree_text_M1 = "1st M.";
-const degree_value_M1 = "M1";
-const degree_text_M2 = "2nd M.";
-const degree_value_M2 = "M2";
-const total_text = "TOTAL";
-const level_text = "OFFENSE LEVEL";
-const desc_text = "DESCRIPTION";
-const qual_text = "QUALIFIER";
-const pnts_text = "POINTS";
-const fsr_text = "F.S.#";
-const cnts_text = "COUNTS";
-const dokt_text = "DOCKET #";
-const fmdg_text = "FEL\/MM DEGREE";
+const degree_text_FL    = "Life F.";
+const degree_value_FL   = "FL";
+const degree_text_F1    = "1st F.";
+const degree_value_F1   = "F1";
+const degree_text_F2    = "2nd F.";
+const degree_value_F2   = "F2";
+const degree_text_F3    = "3rd F.";
+const degree_value_F3   = "F3";
+const degree_text_M1    = "1st M.";
+const degree_value_M1   = "M1";
+const degree_text_M2    = "2nd M.";
+const degree_value_M2   = "M2";
+const total_text        = "TOTAL";
+const level_text        = "OFFENSE LEVEL";
+const desc_text         = "DESCRIPTION";
+const qual_text         = "QUALIFIER";
+const pnts_text         = "POINTS";
+const fsr_text          = "F.S.#";
+const cnts_text         = "COUNTS";
+const dokt_text         = "DOCKET #";
+const fmdg_text         = "FEL\/MM DEGREE";
 const legend_text = {
     preamble : "",
     po   : "I. PRIMARY OFFENSE",
@@ -77,15 +77,35 @@ const legend_text = {
     mi   : "REASONS FOR DEPARTURE - MITIGATING CIRCUMSTANCES",
 };
 const l2p_text = {
-    po : "(Level - Points: 1=4, 2=10, 3=16, 4=22, 5=28, 6=36, 7=56, 8=74, 9=92, 10=116)",
-    ao : "(Level - Points: M=0.2, 1=0.7, 2=1.2, 3=2.4, 4=3.6, 5=5.4, 6=18, 7=28, 8=37, 9=46, 10=58)",
-    pr : "(Level - Points: M=0.2, 1=0.5, 2=0.8, 3=1.6, 4=2.4, 5=3.6, 6=9, 7=14, 8=19, 9=23, 10=29)",
+    po : "(Level - Points: 1=4, 2=10, 3=16, 4=22, " +
+	"5=28, 6=36, 7=56, 8=74, 9=92, 10=116)",
+    ao : "(Level - Points: M=0.2, 1=0.7, 2=1.2, 3=2.4, " +
+	"4=3.6, 5=5.4, 6=18, 7=28, 8=37, 9=46, 10=58)",
+    pr : "(Level - Points: M=0.2, 1=0.5, 2=0.8, 3=1.6, " +
+	"4=2.4, 5=3.6, 6=9, 7=14, 8=19, 9=23, 10=29)",
 };
-const sc_1_text = "If total sentence points are less than or equal to 44, the lowest permissible sentence is any non-state prison sanction . If the total sentence points are 22 points or less, see Section 775.082(10), Florida Statutes, to determine if the court must sentence the offender to a non-state prison sanction.";
+const sc_1_text =
+      "If total sentence points are less than or equal to 44, " +
+      "the lowest permissible sentence is any non-state prison sanction. " +
+      "If the total sentence points are 22 points or less, see Section 775.082(10), " +
+      "Florida Statutes, to determine if the court must sentence the offender to " +
+      "a non-state prison sanction.";
 const sc_2_text = "If total sentence points are greater than 44:";
-const sc_3_text = "The maximum sentence is up to the statutory maximum for the primary and any additional offenses as provided in s. 775.082, F.S., unless the lowest permissible sentence under the Code exceeds the statutory maximum. Such sentences may be imposed concurrently or consecutively. If total sentence points are greater than or equal to 363, a life sentence may be imposed.";
+const sc_3_text =
+      "The maximum sentence is up to the statutory maximum for the " +
+      "primary and any additional offenses as provided in s. 775.082, " +
+      "F.S., unless the lowest permissible sentence under the Code " +
+      "exceeds the statutory maximum. Such sentences may be imposed " +
+      "concurrently or consecutively. If total sentence points are " +
+      "greater than or equal to 363, a life sentence may be imposed.";
 const tsi_1_text = "Please check if sentenced as";
-const mi_text = "Pursuant to 921.0026(3) the defendant’s substance abuse or addiction does not justify a downward departure from the lowest permissible sentence, except for the provisions of s. 921.0026(2)(m). Effective Date: For offenses committed under the Criminal Punishment Code effective for offenses committed on or after October 1, 1998 and subsequent revisions."
+const mi_text =
+      "Pursuant to 921.0026(3) the defendant’s substance abuse or addiction " +
+      "does not justify a downward departure from the lowest permissible sentence, " +
+      "except for the provisions of s. 921.0026(2)(m). Effective Date: For offenses " +
+      "committed under the Criminal Punishment Code effective for offenses " +
+      "committed on or after October 1, 1998 and subsequent revisions."
+const msg_empty_csv_type = "Warning : the type of community sanction is not specified";
 /*
   The ideas of namespaces and modules are used to organise the id's
   The name spaces are:
@@ -306,7 +326,6 @@ const fieldId_CSV = {
     total   : "TT_CSV",
 };
 const fieldLabelText_CSV = {
-    total : total_text,
     tp   : "Probation",
     tcc  : "Community Control",
     tpid : "Pretrial Intervention or diversion",
@@ -315,9 +334,15 @@ const fieldLabelText_CSV = {
     ctw  : "12 points x" + label_text_suffix,
     ctf  : "New felony conviction = 24 points x" + label_text_suffix,
     six  : label_text_prefix + "each successive violation OR",
-    nf   : label_text_prefix + "each successive violation if new offense results in conviction before or at same time as sentence for violation of probation OR",
-    tw   : label_text_prefix + "each successive violation for a violent felony offender of special concern when the violation is not based solely on failure to pay costs, fines, or restitution OR",
-    tf   : label_text_prefix + "each successive violation for a violent felony offender of special concern if new offense results in a conviction before or at the same time for violation of probation",
+    nf   : label_text_prefix + "each successive violation if new offense results in " +
+	"conviction before or at same time as sentence for violation of probation OR",
+    tw   : label_text_prefix + "each successive violation for a violent felony offender " +
+	"of special concern when the violation is not based solely on failure to pay " +
+	"costs, fines, or restitution OR",
+    tf   : label_text_prefix + "each successive violation for a violent felony offender " +
+	"of special concern if new offense results in a conviction before or at the same " +
+	"time for violation of probation",
+    total : total_text,
 };
 const fieldId_FA = {
     total : "TT_FA",
@@ -358,7 +383,8 @@ const fieldLabelText_EH = {
     dt    : "x 1.5 Drug Trafficker",
     mvt   : "x 1.5 Motor Vehicle Theft",
     cgo   : "x 1.5 Criminal Gang Offense",
-    dv    : "x 1.5 Domestic Violence in the Presence of Related Child (offenses committed on or after 3/12/07)",
+    dv    : "x 1.5 Domestic Violence in the Presence of Related Child " +
+	"(offenses committed on or after 3/12/07)",
     so    : "x 2.0 Adult-on-Minor Sex Offense (offenses committed on or after 10/1/14)",
 };
 const fieldId_TSP = {
@@ -404,11 +430,11 @@ const fieldId_TSI = {
     month_r2 : "M2_TSI",
     month_r3 : "M3_TSI",
     month_r4 : "M4_TSI",
-    days_r1 : "D1_TSI",
-    days_r2 : "D2_TSI",
-    days_r3 : "D3_TSI",
-    days_r4 : "D4_TSI",
-    other   : "OTHER_TSI",
+    days_r1  : "D1_TSI",
+    days_r2  : "D2_TSI",
+    days_r3  : "D3_TSI",
+    days_r4  : "D4_TSI",
+    other    : "OTHER_TSI",
 };
 const fieldLabelText_TSI = {
     check_sp : "State Prison",
@@ -434,22 +460,22 @@ const fieldLabelText_TSI = {
     month_r2 : "Months",
     month_r3 : "Months",
     month_r4 : "Months",
-    days_r1 : "Days",
-    days_r2 : "Days",
-    days_r3 : "Days",
-    days_r4 : "Days",
-    other   : "Other Reason",
+    days_r1  : "Days",
+    days_r2  : "Days",
+    days_r3  : "Days",
+    days_r4  : "Days",
+    other    : "Other Reason",
 };
 const fieldId_MI = {
-    r1 : "R1_MI",
-    r2 : "R2_MI",
-    r3 : "R3_MI",
-    r4 : "R4_MI",
-    r5 : "R5_MI",
-    r6 : "R6_MI",
-    r7 : "R7_MI",
-    r8 : "R8_MI",
-    r9 : "R9_MI",
+    r1  : "R1_MI",
+    r2  : "R2_MI",
+    r3  : "R3_MI",
+    r4  : "R4_MI",
+    r5  : "R5_MI",
+    r6  : "R6_MI",
+    r7  : "R7_MI",
+    r8  : "R8_MI",
+    r9  : "R9_MI",
     r10 : "R10_MI",
     r11 : "R11_MI",
     r12 : "R12_MI",
@@ -457,20 +483,34 @@ const fieldId_MI = {
     r14 : "R14_MI",
 };
 const fieldLabelText_MI = {
-    r1 : "Legitimate, uncoerced plea bargain.",
-    r2 : "The defendant was an accomplice to the offense and was a relatively minor participant in the criminal conduct.",
-    r3 : "The capacity of the defendant to appreciate the criminal nature of the conduct or to conform that conduct to the requirements of law was substantially impaired.",
-    r4 : "The defendant requires specialized treatment for a mental disorder that is unrelated to substance abuse or addiction, or for a physical disability, and the defendant is amenable to treatment.",
-    r5 : "The need for payment of restitution to the victim outweighs the need for a prison sentence.",
-    r6 : "The victim was an initiator, willing participant, aggressor, or provoker of the incident.",
-    r7 : "The defendant acted under extreme duress or under the domination of another person.",
-    r8 : "Before the identity of the defendant was determined, the victim was substantially compensated.",
-    r9 : "The defendant cooperated with the State to resolve the current offense or any other offense.",
-    r10 : "The offense was committed in an unsophisticated manner and was an isolated incident for which the defendant has shown remorse.",
-    r11 : "At the time of the offense the defendant was too young to appreciate the consequences of the offense.",
+    r1  : "Legitimate, uncoerced plea bargain.",
+    r2  : "The defendant was an accomplice to the offense " +
+	"and was a relatively minor participant in the criminal conduct.",
+    r3  : "The capacity of the defendant to appreciate the criminal " +
+	"nature of the conduct or to conform that conduct to the " +
+	"requirements of law was substantially impaired.",
+    r4  : "The defendant requires specialized treatment for a mental " +
+	"disorder that is unrelated to substance abuse or addiction, or " +
+	"for a physical disability, and the defendant is amenable to treatment.",
+    r5  : "The need for payment of restitution to the victim outweighs the " +
+	"need for a prison sentence.",
+    r6  : "The victim was an initiator, willing participant, aggressor, or " +
+	"provoker of the incident.",
+    r7  : "The defendant acted under extreme duress or under the domination of " +
+	"another person.",
+    r8  : "Before the identity of the defendant was determined, the victim was " +
+	"substantially compensated.",
+    r9  : "The defendant cooperated with the State to resolve the current offense " +
+	"or any other offense.",
+    r10 : "The offense was committed in an unsophisticated manner and was an " +
+	"isolated incident for which the defendant has shown remorse.",
+    r11 : "At the time of the offense the defendant was too young to appreciate " +
+	"the consequences of the offense.",
     r12 : "The defendant is to be sentenced as a youthful offender.",
-    r13 :  "The defendant is amenable to the services of a postadjudicatory treatment-based drug court program and is otherwise qualified to participate in the program.",
-    r14 : "The defendant was making a good faith effort to obtain or provide medical assistance for an individual experiencing a drug-related overdose.",
+    r13 :  "The defendant is amenable to the services of a postadjudicatory treatment-" +
+	"based drug court program and is otherwise qualified to participate in the program.",
+    r14 : "The defendant was making a good faith effort to obtain or provide medical " +
+	"assistance for an individual experiencing a drug-related overdose.",
 };
 // fieldset element assess
 const pa_top  = document.getElementById("PREAMBLE");   // preamble container
@@ -486,7 +526,7 @@ const st_top  = document.getElementById("ST");     // Subtotal Sentence Points c
 const eh_top  = document.getElementById("EH");     // enhancements container
 const tsp_top = document.getElementById("TSP");    // total sentense points container
 const sc_top  = document.getElementById("SC");     // sentense computation container
-const tsi_top  = document.getElementById("TSI");   // total sentense imposed container
+const tsi_top = document.getElementById("TSI");   // total sentense imposed container
 const mi_top  = document.getElementById("MI");     // mitigating circum. container
 
 // utilities
@@ -983,6 +1023,15 @@ function legal_status () {
     insert_checkbox(ls_top,fieldId_LS.cs,fieldLabelText_LS.cs);
     insert_field_label(ls_top,fieldId_LS.total,fieldLabelText_LS.total,"");
     insert_text_field(ls_top,fieldId_LS.total);
+    setTextFieldDefault(fieldId_LS.total,"0","readonly"); // default total : 0
+    // on-change events handling
+    document.getElementById(fieldId_LS.es).setAttribute("onchange","refresh_LS()");
+    document.getElementById(fieldId_LS.fl).setAttribute("onchange","refresh_LS()");
+    document.getElementById(fieldId_LS.fp).setAttribute("onchange","refresh_LS()");
+    document.getElementById(fieldId_LS.sb).setAttribute("onchange","refresh_LS()");
+    document.getElementById(fieldId_LS.ic).setAttribute("onchange","refresh_LS()");
+    document.getElementById(fieldId_LS.pid).setAttribute("onchange","refresh_LS()");
+    document.getElementById(fieldId_LS.cs).setAttribute("onchange","refresh_LS()");
 }
 function cs_violation () {
     insert_legend(csv_top,legend_text.csv);
@@ -991,31 +1040,42 @@ function cs_violation () {
     new_emsp(csv_top);
     insert_checkbox_NB(csv_top,fieldId_CSV.tcc,fieldLabelText_CSV.tcc);
     new_emsp(csv_top);
-    insert_checkbox(csv_top,fieldId_CSV.tpid,fieldLabelText_CSV.tpid);
-    
+    insert_checkbox(csv_top,fieldId_CSV.tpid,fieldLabelText_CSV.tpid);    
     insert_checkbox_NB(csv_top,fieldId_CSV.csix,fieldLabelText_CSV.csix);
     insert_text_field_NB(csv_top,fieldId_CSV.six);
     insert_field_label(csv_top,fieldId_CSV.six,fieldLabelText_CSV.six,"br");
-    
     insert_checkbox_NB(csv_top,fieldId_CSV.cnf,fieldLabelText_CSV.cnf);
     insert_text_field_NB(csv_top,fieldId_CSV.nf);
     insert_field_label(csv_top,fieldId_CSV.nf,fieldLabelText_CSV.nf,"br");
-    
     insert_checkbox_NB(csv_top,fieldId_CSV.ctw,fieldLabelText_CSV.ctw);
     insert_text_field_NB(csv_top,fieldId_CSV.tw);
     insert_field_label(csv_top,fieldId_CSV.tw,fieldLabelText_CSV.tw,"br");
-    
     insert_checkbox_NB(csv_top,fieldId_CSV.ctf,fieldLabelText_CSV.ctf);
     insert_text_field_NB(csv_top,fieldId_CSV.tf);
     insert_field_label(csv_top,fieldId_CSV.tf,fieldLabelText_CSV.tf,"br");
-
     insert_field_label(csv_top,fieldId_CSV.total,fieldLabelText_CSV.total,"");
     insert_text_field(csv_top,fieldId_CSV.total);
+    // default values
+    setTextFieldDefault(fieldId_CSV.total,"0","readonly");
+    setTextFieldDefault(fieldId_CSV.six,  "0","");
+    setTextFieldDefault(fieldId_CSV.nf,   "0","");
+    setTextFieldDefault(fieldId_CSV.tw,   "0","");
+    setTextFieldDefault(fieldId_CSV.tf,   "0","");
+    // on-change events handling
+    document.getElementById(fieldId_CSV.six).setAttribute("onchange","refresh_CSV()");
+    document.getElementById(fieldId_CSV.nf).setAttribute("onchange","refresh_CSV()");
+    document.getElementById(fieldId_CSV.tw).setAttribute("onchange","refresh_CSV()");
+    document.getElementById(fieldId_CSV.tf).setAttribute("onchange","refresh_CSV()");
 }
 function firearm () {
     insert_legend(fa_top,legend_text.fa);
     insert_field_label(fa_top,fieldId_FA.total,fieldLabelText_FA.total,"");
     insert_text_field(fa_top,fieldId_FA.total);
+    // default values
+    setTextFieldDefault(fieldId_FA.total,"0","");
+    // on-change events handling
+    document.getElementById(fieldId_FA.total).setAttribute("onchange","check_FA()");
+   
 }
 function prior_cs_felony () {
     insert_legend(pcs_top,legend_text.pcsf);
@@ -1384,5 +1444,71 @@ function refresh_VI () {
     document.getElementById(fieldId_VI.topTotal).value =
 	(st1 + st2 + st3 + st4 + st5 + st6 + st7).toString();
 }
-
-
+function refresh_LS () {
+    // get checkbox status
+    const cb1 = document.getElementById(fieldId_LS.es).checked;
+    const cb2 = document.getElementById(fieldId_LS.fl).checked;
+    const cb3 = document.getElementById(fieldId_LS.fp).checked;
+    const cb4 = document.getElementById(fieldId_LS.sb).checked;
+    const cb5 = document.getElementById(fieldId_LS.ic).checked;
+    const cb6 = document.getElementById(fieldId_LS.pid).checked;
+    const cb7 = document.getElementById(fieldId_LS.cs).checked;
+    if (cb1 || cb2 || cb3 || cb4 || cb5 || cb6 || cb7) { // if any one is checked
+	document.getElementById(fieldId_LS.total).value = "4";
+    } else { document.getElementById(fieldId_LS.total).value = "0"; }
+}
+function refresh_CSV () {
+    let new_total = undefined;
+    const total = document.getElementById(fieldId_CSV.total);
+    const tp   = document.getElementById(fieldId_CSV.tp);
+    const tcc  = document.getElementById(fieldId_CSV.tcc);
+    const tpid = document.getElementById(fieldId_CSV.tpid);
+    const csix = document.getElementById(fieldId_CSV.csix);
+    const cnf  = document.getElementById(fieldId_CSV.cnf);
+    const ctw  = document.getElementById(fieldId_CSV.ctw);
+    const ctf  = document.getElementById(fieldId_CSV.ctf);
+    const six  = document.getElementById(fieldId_CSV.six);
+    const nf   = document.getElementById(fieldId_CSV.nf);
+    const tw   = document.getElementById(fieldId_CSV.tw);
+    const tf   = document.getElementById(fieldId_CSV.tf);
+    // auto checkbox update when related counts are updated
+    if (parseInt(six.value) != 0) { csix.checked = true; } else { csix.checked = false; } 
+    if (parseInt(nf.value) != 0) { cnf.checked = true; } else { cnf.checked = false; }
+    if (parseInt(tw.value) != 0) { ctw.checked = true; } else { ctw.checked = false; }
+    if (parseInt(tf.value) != 0) { ctf.checked = true; } else { ctf.checked = false; }
+    // compute the total in the most permissive manner
+    new_total =
+	6 * parseInt(six.value) +
+	12 * parseInt(nf.value) +
+	12 * parseInt(tw.value) +
+	24 * parseInt(tf.value);
+    total.value = new_total.toString();
+    // some visual effect to ask indicating the violation type :
+    // probation or community controL or else?
+    if (!tp.checked && !tcc.checked && !tpid.checked) {
+	if (csix.checked || cnf.checked || ctw.checked || ctf.checked) {
+	    alert(msg_empty_csv_type);
+	    function light_on () {
+		tp.checked   = true;
+		tcc.checked  = true;
+		tpid.checked = true;
+		setTimeout(light_off,200);
+	    }
+	    function light_off () {
+		tp.checked   = false;
+		tcc.checked  = false;
+		tpid.checked = false;
+	    }
+	    light_on();
+	    setTimeout(light_on,400);
+	}
+    }
+}
+function check_FA () {
+    const elem = document.getElementById(fieldId_FA.total);
+    const val = elem.value;
+    if (val != "0" && val != "18" && val != "25") {
+	alert("Error: " + fieldLabelText_FA.total);
+	elem.value = "0";
+    }
+}
