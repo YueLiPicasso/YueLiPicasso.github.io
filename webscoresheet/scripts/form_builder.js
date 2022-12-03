@@ -105,7 +105,6 @@ const mi_text =
       "except for the provisions of s. 921.0026(2)(m). Effective Date: For offenses " +
       "committed under the Criminal Punishment Code effective for offenses " +
       "committed on or after October 1, 1998 and subsequent revisions."
-const msg_empty_csv_type = "Warning : the type of community sanction is not specified";
 /*
   The ideas of namespaces and modules are used to organise the id's
   The name spaces are:
@@ -351,10 +350,14 @@ const fieldLabelText_FA = {
     total : "Firearm\/Semi-Automatic or Machine Gun = 18 or 25 Points" + label_text_suffix,
 };
 const fieldId_PCSF = {
-    pcap : "C_PCSF",
-    pser : "S_PCSF",
+    pcap_ck : "PCAP_CK_PCSF",
+    pser_ck : "PSER_CK_PCSF",
+    pcap    : "PCAP_PCSF",
+    pser    : "PSER_PCSF",
 };
 const fieldLabelText_PCSF = {
+    pcap_ck : "",
+    pser_ck : "",
     pcap : "Prior capital felony - 2 x (Primary + Add. Off. Points)" + label_text_suffix,
     pser : "Prior serious felony - 30 Points" + label_text_suffix,
 };
@@ -514,20 +517,20 @@ const fieldLabelText_MI = {
 };
 // fieldset element assess
 const pa_top  = document.getElementById("PREAMBLE");   // preamble container
-const po_top  = document.getElementById("PO");     // primary offense container
-const ao_top  = document.getElementById("AO");     // additional offense container
-const vi_top  = document.getElementById("VI");     // victim injury container
-const pr_top  = document.getElementById("PR");     // prior record container
-const ls_top  = document.getElementById("LS");     // legal status container
-const csv_top = document.getElementById("CSV");    // com. sanc. violation container
-const fa_top  = document.getElementById("FA");     // firearm points container
-const pcs_top = document.getElementById("PCSF");   // prior captital and serious felony container
-const st_top  = document.getElementById("ST");     // Subtotal Sentence Points container
-const eh_top  = document.getElementById("EH");     // enhancements container
-const tsp_top = document.getElementById("TSP");    // total sentense points container
-const sc_top  = document.getElementById("SC");     // sentense computation container
-const tsi_top = document.getElementById("TSI");   // total sentense imposed container
-const mi_top  = document.getElementById("MI");     // mitigating circum. container
+const po_top  = document.getElementById("PO");         // primary offense container
+const ao_top  = document.getElementById("AO");         // additional offense container
+const vi_top  = document.getElementById("VI");         // victim injury container
+const pr_top  = document.getElementById("PR");         // prior record container
+const ls_top  = document.getElementById("LS");         // legal status container
+const csv_top = document.getElementById("CSV");        // com. sanc. violation container
+const fa_top  = document.getElementById("FA");         // firearm points container
+const pcs_top = document.getElementById("PCSF");       // prior captital and serious felony container
+const st_top  = document.getElementById("ST");         // Subtotal Sentence Points container
+const eh_top  = document.getElementById("EH");         // enhancements container
+const tsp_top = document.getElementById("TSP");        // total sentense points container
+const sc_top  = document.getElementById("SC");         // sentense computation container
+const tsi_top = document.getElementById("TSI");        // total sentense imposed container
+const mi_top  = document.getElementById("MI");         // mitigating circum. container
 
 // utilities
 function style_input_field(param) {
@@ -536,7 +539,7 @@ function style_input_field(param) {
 	  "font-size:100%;" +
 	  "border-bottom:1px solid;" +
 	  "background-color:white;" +
-	  "padding:4px 0px;" +
+	  "padding:4px 1em;" +
 	  "margin:2px;";
     param.setAttribute("style",val);
 }
@@ -775,19 +778,15 @@ function additional_off () {
     // total for all A.O.
     insert_field_label(ao_top,fieldId_AOTOP.total,fieldLabelText_AO.topTotal,"");
     insert_text_field_NB(ao_top,fieldId_AOTOP.total);
-    setTextFieldDefault(fieldId_AOTOP.total,"0.0","readonly"); // default is 0
-    
+    setTextFieldDefault(fieldId_AOTOP.total,"0.0","readonly"); // default is 0    
     new_emsp(ao_top);
-    
     const add_butt = document.createElement("input");
     add_butt.setAttribute("type","button");
     add_butt.setAttribute("value",add_butt_text);
     add_butt.setAttribute("onclick","add_AOP(\"AO\")");
     style_input_button(add_butt);
     ao_top.appendChild(add_butt);
-
     new_emsp(ao_top);
-    
     const rm_butt = document.createElement("input");
     rm_butt.setAttribute("type","button");
     rm_butt.setAttribute("value",rm_butt_text);
@@ -850,13 +849,13 @@ function victim_injury () {
     setTextFieldDefault(fieldId_VI.xc_tol,        "0","readonly");
     setTextFieldDefault(fieldId_VI.topTotal,      "0","readonly");
     // on-change events handling
-    document.getElementById(fieldId_VI.sec_murder_num).setAttribute("onchange","refresh_VI()");
-    document.getElementById(fieldId_VI.death_num).setAttribute("onchange","refresh_VI()");
-    document.getElementById(fieldId_VI.severe_num).setAttribute("onchange","refresh_VI()");
-    document.getElementById(fieldId_VI.moderate_num).setAttribute("onchange","refresh_VI()");
-    document.getElementById(fieldId_VI.slight_num).setAttribute("onchange","refresh_VI()");
-    document.getElementById(fieldId_VI.xp_num).setAttribute("onchange","refresh_VI()");
-    document.getElementById(fieldId_VI.xc_num).setAttribute("onchange","refresh_VI()");
+    document.getElementById(fieldId_VI.sec_murder_num).setAttribute("oninput","refresh_VI()");
+    document.getElementById(fieldId_VI.death_num).setAttribute("oninput","refresh_VI()");
+    document.getElementById(fieldId_VI.severe_num).setAttribute("oninput","refresh_VI()");
+    document.getElementById(fieldId_VI.moderate_num).setAttribute("oninput","refresh_VI()");
+    document.getElementById(fieldId_VI.slight_num).setAttribute("oninput","refresh_VI()");
+    document.getElementById(fieldId_VI.xp_num).setAttribute("oninput","refresh_VI()");
+    document.getElementById(fieldId_VI.xc_num).setAttribute("oninput","refresh_VI()");
 }
 function prior_record () {
     insert_legend(pr_top,legend_text.pr);
@@ -963,10 +962,10 @@ function add_AOP(param) {
     insert_field_label(top,counts,label.counts,"");
     insert_text_field(top,counts);
     setTextFieldDefault(counts,"1","");  // default counts is 1
-    // counts onchange event
+    // counts oninput event
     const counts_field = document.getElementById(counts);
-    if (param == "AO") { counts_field.setAttribute("onchange","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
-    if (param == "PR") { counts_field.setAttribute("onchange","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
+    if (param == "AO") { counts_field.setAttribute("oninput","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
+    if (param == "PR") { counts_field.setAttribute("oninput","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
     // points for one count of the offense
     insert_field_label(top,points,label.points,"");
     insert_text_field(top,points);
@@ -1061,33 +1060,45 @@ function cs_violation () {
     setTextFieldDefault(fieldId_CSV.nf,   "0","");
     setTextFieldDefault(fieldId_CSV.tw,   "0","");
     setTextFieldDefault(fieldId_CSV.tf,   "0","");
-    // on-change events handling
-    document.getElementById(fieldId_CSV.six).setAttribute("onchange","refresh_CSV()");
-    document.getElementById(fieldId_CSV.nf).setAttribute("onchange","refresh_CSV()");
-    document.getElementById(fieldId_CSV.tw).setAttribute("onchange","refresh_CSV()");
-    document.getElementById(fieldId_CSV.tf).setAttribute("onchange","refresh_CSV()");
+    // on-input events handling
+    document.getElementById(fieldId_CSV.six).setAttribute("oninput","refresh_CSV()");
+    document.getElementById(fieldId_CSV.nf).setAttribute("oninput","refresh_CSV()");
+    document.getElementById(fieldId_CSV.tw).setAttribute("oninput","refresh_CSV()");
+    document.getElementById(fieldId_CSV.tf).setAttribute("oninput","refresh_CSV()");
 }
 function firearm () {
     insert_legend(fa_top,legend_text.fa);
     insert_field_label(fa_top,fieldId_FA.total,fieldLabelText_FA.total,"");
-    insert_text_field(fa_top,fieldId_FA.total);
-    // default values
-    setTextFieldDefault(fieldId_FA.total,"0","");
-    // on-change events handling
-    document.getElementById(fieldId_FA.total).setAttribute("onchange","check_FA()");
-   
+    const total_field_FA = insert_dropdown(fa_top,fieldId_FA.total);
+    insert_option("0","0","selected",total_field_FA); // default zero
+    insert_option("18","18","",total_field_FA);
+    insert_option("25","25","",total_field_FA);
+    total_field_FA.setAttribute("onchange","refresh_ST()");
 }
 function prior_cs_felony () {
     insert_legend(pcs_top,legend_text.pcsf);
+    
+    insert_checkbox_NB(pcs_top,fieldId_PCSF.pcap_ck,fieldLabelText_PCSF.pcap_ck);
+    new_nbsp(pcs_top);
     insert_field_label(pcs_top,fieldId_PCSF.pcap,fieldLabelText_PCSF.pcap,"");
     insert_text_field(pcs_top,fieldId_PCSF.pcap);
+    
+    insert_checkbox_NB(pcs_top,fieldId_PCSF.pser_ck,fieldLabelText_PCSF.pser_ck);
+    new_nbsp(pcs_top);
     insert_field_label(pcs_top,fieldId_PCSF.pser,fieldLabelText_PCSF.pser,"");
-    insert_text_field(pcs_top,fieldId_PCSF.pser); 
+    insert_text_field(pcs_top,fieldId_PCSF.pser);
+    
+    setTextFieldDefault(fieldId_PCSF.pcap,"0","readonly"); // default : 0
+    setTextFieldDefault(fieldId_PCSF.pser,"0","readonly"); // default : 0
+    // on-change events handling
+    document.getElementById(fieldId_PCSF.pcap_ck).setAttribute("onchange","refresh_pcap()");
+    document.getElementById(fieldId_PCSF.pser_ck).setAttribute("onchange","refresh_pser()");
 }
 function subtotal_points () {
     insert_legend(st_top,legend_text.st);
     insert_field_label(st_top,fieldId_ST.total,fieldLabelText_ST.total,"");
-    insert_text_field(st_top,fieldId_ST.total); 
+    insert_text_field(st_top,fieldId_ST.total);
+    setTextFieldDefault(fieldId_ST.total,"4","readonly"); // default : 4
 }
 function enhancements () {
     insert_legend(eh_top,legend_text.eh);
@@ -1100,12 +1111,23 @@ function enhancements () {
     insert_checkbox(eh_top,fieldId_EH.dv,fieldLabelText_EH.dv);
     insert_checkbox(eh_top,fieldId_EH.so,fieldLabelText_EH.so);
     insert_field_label(eh_top,fieldId_EH.total,fieldLabelText_EH.total,"");
-    insert_text_field(eh_top,fieldId_EH.total); 
+    insert_text_field(eh_top,fieldId_EH.total);
+    setTextFieldDefault(fieldId_EH.total,"0","readonly"); // default : 0
+    // on-change events handling
+    document.getElementById(fieldId_EH.lep1).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.lep2).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.lep3).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.dt).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.mvt).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.cgo).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.dv).setAttribute("onchange","refresh_EH()");
+    document.getElementById(fieldId_EH.so).setAttribute("onchange","refresh_EH()");
 }
 function total_points () {
     insert_legend(tsp_top,legend_text.tsp);
     insert_field_label(tsp_top,fieldId_TSP.total,fieldLabelText_TSP.total,"");
-    insert_text_field(tsp_top,fieldId_TSP.total); 
+    insert_text_field(tsp_top,fieldId_TSP.total);
+    setTextFieldDefault(fieldId_TSP.total,"4","readonly"); // default : 4
 }
 function sentence_comp () {
     insert_legend(sc_top,legend_text.sc);
@@ -1256,6 +1278,59 @@ mitigating();      // Build mitigating circum. fields
 
 // Event handlers
 
+/* The on-the-fly update logic is like a cascade : 
+
+I.
+--> levelChange_PO                        (primary offense level/points) 
+-------> refresh_pcap                     (prior capital felony points)
+------------> refresh_ST                  (subtotal sentence points)
+-----------------> refresh_EH             (enhanced subtotal points)
+----------------------> refresh_TSP       (total sentence points)
+
+II./IV.
+--> levelnCountsChange/add/remove_AOP     (single additional offense or prior record points)
+-------> refreshTotal_AOP                 (additional offense or prior record total points)
+------------> refresh_pcap                *(prior capital felony points)
+-----------------> refresh_ST             (subtotal sentence points)
+----------------------> refresh_EH        (enhanced subtotal points)
+---------------------------> refresh_TSP  (total sentence points)
+
+III.
+--> refresh_VI                            (victime injury points)
+-------> refresh_ST                       (subtotal sentence points)
+------------> refresh_EH                  (enhanced subtotal points)
+-----------------> refresh_TSP            (total sentence points)
+
+V.
+--> refresh_LS                            (legal status points)
+-------> refresh_ST                       (subtotal sentence points)
+------------> refresh_EH                  (enhanced subtotal points)
+-----------------> refresh_TSP            (total sentence points)
+
+VI.
+--> refresh_CSV                           (community sanction violation points)
+-------> refresh_ST                       (subtotal sentence points)
+------------> refresh_EH                  (enhanced subtotal points)
+-----------------> refresh_TSP            (total sentence points)
+
+VII.
+--> refresh_FA                            (firearm or machine gun points)
+---synonym.--> refresh_ST                 (subtotal sentence points) 
+------------------> refresh_EH            (enhanced subtotal points)
+-----------------------> refresh_TSP      (total sentence points)
+
+VIII.
+--> refresh_pser                          (prior serious felony points)
+-------> refresh_ST                       (subtotal sentence points)
+------------> refresh_EH                  (enhanced subtotal points)
+-----------------> refresh_TSP            (total sentence points)
+
+--> refresh_pcap                          (prior capital felony points)
+-------> refresh_ST                       (subtotal sentence points)
+------------> refresh_EH                  (enhanced subtotal points)
+-----------------> refresh_TSP            (total sentence points)
+*/
+
 function levelChange_PO () {
     const level_field_PO = document.getElementById(fieldId_PO.level);
     const points_field_PO = document.getElementById(fieldId_PO.points);
@@ -1292,6 +1367,7 @@ function levelChange_PO () {
 	points = "116";
     }
     points_field_PO.value = points;
+    refresh_pcap(); // refresh prior capital felony points
 }
 function levelnCountsChange_AOP(param, cnt_str) {
     // possibly changed fields
@@ -1420,7 +1496,8 @@ function refreshTotal_AOP (param) {
 	    subtotal += item_value; 
 	}
     }
-    topTotal.value = subtotal.toFixed(1).toString(); // refresh 
+    topTotal.value = subtotal.toFixed(1).toString(); // refresh
+    refresh_pcap(); // refresh prior capital felony points (* don't care AO or PR)
 }
 // change any Number field of VI influences the subtotal and total 
 function refresh_VI () {
@@ -1443,6 +1520,7 @@ function refresh_VI () {
     // new VI-toptotal: compute and assign
     document.getElementById(fieldId_VI.topTotal).value =
 	(st1 + st2 + st3 + st4 + st5 + st6 + st7).toString();
+    refresh_ST(); // refresh subtotal sentence points
 }
 function refresh_LS () {
     // get checkbox status
@@ -1456,26 +1534,15 @@ function refresh_LS () {
     if (cb1 || cb2 || cb3 || cb4 || cb5 || cb6 || cb7) { // if any one is checked
 	document.getElementById(fieldId_LS.total).value = "4";
     } else { document.getElementById(fieldId_LS.total).value = "0"; }
+    refresh_ST(); // refresh subtotal sentence points
 }
 function refresh_CSV () {
     let new_total = undefined;
     const total = document.getElementById(fieldId_CSV.total);
-    const tp   = document.getElementById(fieldId_CSV.tp);
-    const tcc  = document.getElementById(fieldId_CSV.tcc);
-    const tpid = document.getElementById(fieldId_CSV.tpid);
-    const csix = document.getElementById(fieldId_CSV.csix);
-    const cnf  = document.getElementById(fieldId_CSV.cnf);
-    const ctw  = document.getElementById(fieldId_CSV.ctw);
-    const ctf  = document.getElementById(fieldId_CSV.ctf);
     const six  = document.getElementById(fieldId_CSV.six);
     const nf   = document.getElementById(fieldId_CSV.nf);
     const tw   = document.getElementById(fieldId_CSV.tw);
     const tf   = document.getElementById(fieldId_CSV.tf);
-    // auto checkbox update when related counts are updated
-    if (parseInt(six.value) != 0) { csix.checked = true; } else { csix.checked = false; } 
-    if (parseInt(nf.value) != 0) { cnf.checked = true; } else { cnf.checked = false; }
-    if (parseInt(tw.value) != 0) { ctw.checked = true; } else { ctw.checked = false; }
-    if (parseInt(tf.value) != 0) { ctf.checked = true; } else { ctf.checked = false; }
     // compute the total in the most permissive manner
     new_total =
 	6 * parseInt(six.value) +
@@ -1483,32 +1550,74 @@ function refresh_CSV () {
 	12 * parseInt(tw.value) +
 	24 * parseInt(tf.value);
     total.value = new_total.toString();
-    // some visual effect to ask indicating the violation type :
-    // probation or community controL or else?
-    if (!tp.checked && !tcc.checked && !tpid.checked) {
-	if (csix.checked || cnf.checked || ctw.checked || ctf.checked) {
-	    alert(msg_empty_csv_type);
-	    function light_on () {
-		tp.checked   = true;
-		tcc.checked  = true;
-		tpid.checked = true;
-		setTimeout(light_off,200);
-	    }
-	    function light_off () {
-		tp.checked   = false;
-		tcc.checked  = false;
-		tpid.checked = false;
-	    }
-	    light_on();
-	    setTimeout(light_on,400);
-	}
-    }
+    refresh_ST(); // refresh subtotal sentence points
 }
-function check_FA () {
-    const elem = document.getElementById(fieldId_FA.total);
-    const val = elem.value;
-    if (val != "0" && val != "18" && val != "25") {
-	alert("Error: " + fieldLabelText_FA.total);
-	elem.value = "0";
-    }
+function refresh_pser () {
+    const pser_ck = document.getElementById(fieldId_PCSF.pser_ck);
+    const pser    = document.getElementById(fieldId_PCSF.pser);
+    if (pser_ck.checked) { pser.value = "30"; } else { pser.value = "0"; }
+    refresh_ST(); // refresh subtotal sentence points
+}
+function refresh_pcap () {
+    const pcap_ck = document.getElementById(fieldId_PCSF.pcap_ck);
+    const pcap    = document.getElementById(fieldId_PCSF.pcap);
+    if (pcap_ck.checked) {
+	const po_tol  = document.getElementById(fieldId_PO.points);
+	const ao_tol  = document.getElementById(fieldId_AOTOP.total);
+	pcap.value =
+	    (2 * (parseFloat(ao_tol.value) + parseFloat(po_tol.value))).toFixed(1).toString();
+    } else { pcap.value = "0"; }
+    refresh_ST(); // refresh subtotal sentence points
+}
+function refresh_ST () {
+    const total_ST  = document.getElementById(fieldId_ST.total);
+    const total_PO  = document.getElementById(fieldId_PO.points).value;
+    const total_AO  = document.getElementById(fieldId_AOTOP.total).value;
+    const total_VI  = document.getElementById(fieldId_VI.topTotal).value;
+    const total_PR  = document.getElementById(fieldId_PRTOP.total).value;
+    const total_LS  = document.getElementById(fieldId_LS.total).value;
+    const total_CSV = document.getElementById(fieldId_CSV.total).value;
+    const total_FA  = document.getElementById(fieldId_FA.total).value;
+    const total_PC  = document.getElementById(fieldId_PCSF.pcap).value;
+    const total_PS  = document.getElementById(fieldId_PCSF.pser).value;
+
+    total_ST.value = (parseFloat(total_PO)  +
+		      parseFloat(total_AO)  +
+		      parseFloat(total_VI)  +
+		      parseFloat(total_PR)  +
+		      parseFloat(total_LS)  +
+		      parseFloat(total_CSV) +
+		      parseFloat(total_FA)  +
+		      parseFloat(total_PC)  +
+    		      parseFloat(total_PS)).toFixed(1).toString();
+    refresh_EH();
+}
+function refresh_EH () {
+    const tol       = document.getElementById(fieldId_EH.total);
+    const total_ST  = document.getElementById(fieldId_ST.total);
+    if (document.getElementById(fieldId_EH.lep1).checked) {
+	tol.value = (parseFloat(total_ST.value) * 1.5).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.lep2).checked) {
+	tol.value = (parseFloat(total_ST.value) * 2.0).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.lep3).checked) {
+	tol.value = (parseFloat(total_ST.value) * 2.5).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.dt).checked) {
+	tol.value = (parseFloat(total_ST.value) * 1.5).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.mvt).checked) {
+	tol.value = (parseFloat(total_ST.value) * 1.5).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.cgo).checked) {
+	tol.value = (parseFloat(total_ST.value) * 1.5).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.dv).checked) {
+	tol.value = (parseFloat(total_ST.value) * 1.5).toFixed(2).toString();
+    } else if (document.getElementById(fieldId_EH.so).checked) {
+	tol.value = (parseFloat(total_ST.value) * 2.0).toFixed(2).toString();
+    } else { tol.value = "0"; }
+    refresh_TSP();
+}
+function refresh_TSP () {
+    const tol_EH  = document.getElementById(fieldId_EH.total);
+    const tol_TSP = document.getElementById(fieldId_TSP.total);
+    const tol_ST  = document.getElementById(fieldId_ST.total);
+    if (tol_EH.value == "0") { tol_TSP.value = tol_ST.value; }
+    else { tol_TSP.value = tol_EH.value; }
 }
