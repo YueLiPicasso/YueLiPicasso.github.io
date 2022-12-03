@@ -1144,6 +1144,10 @@ function sentence_comp () {
     insert_text_field_NB(sc_top,fieldId_SC.m28);
     insert_field_label(sc_top,fieldId_SC.td75,fieldLabelText_SC.td75,"");
     insert_text_field_NB(sc_top,fieldId_SC.td75);
+
+    setTextFieldDefault(fieldId_SC.tsp,"","readonly");  // default : null
+    setTextFieldDefault(fieldId_SC.m28,"","readonly");  // default : null
+    setTextFieldDefault(fieldId_SC.td75,"","readonly"); // default : null
     
     const td75_postlabel = document.createElement("label");
     td75_postlabel.setAttribute("for",fieldId_SC.td75);
@@ -1329,6 +1333,8 @@ VIII.
 -------> refresh_ST                       (subtotal sentence points)
 ------------> refresh_EH                  (enhanced subtotal points)
 -----------------> refresh_TSP            (total sentence points)
+
+And always, refresh_TSP --> refresh_SC    (sentence computation)
 */
 
 function levelChange_PO () {
@@ -1620,4 +1626,21 @@ function refresh_TSP () {
     const tol_ST  = document.getElementById(fieldId_ST.total);
     if (tol_EH.value == "0") { tol_TSP.value = tol_ST.value; }
     else { tol_TSP.value = tol_EH.value; }
+    refresh_SC();
+}
+function refresh_SC () {
+    const tol_TSP = parseFloat(document.getElementById(fieldId_TSP.total).value);
+    if (tol_TSP > 44) {
+	document.getElementById(fieldId_SC.tsp).value =
+	    tol_TSP.toFixed(2).toString(); 
+	document.getElementById(fieldId_SC.m28).value =
+	    (tol_TSP - 28).toFixed(2).toString();
+	document.getElementById(fieldId_SC.td75).value =
+	    (0.75 * (tol_TSP - 28)).toFixed(2).toString();	
+    }
+    if (tol_TSP <= 44) {
+	document.getElementById(fieldId_SC.tsp).value = ""; 
+	document.getElementById(fieldId_SC.m28).value = "";
+	document.getElementById(fieldId_SC.td75).value = "";
+    }
 }
