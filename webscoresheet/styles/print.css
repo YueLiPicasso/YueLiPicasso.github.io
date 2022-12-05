@@ -1,0 +1,11 @@
+fieldset {
+    break-inside : avoid;
+}
+
+input[type=button] {
+    display : none;
+}
+
+select {
+    appearance: none;
+}

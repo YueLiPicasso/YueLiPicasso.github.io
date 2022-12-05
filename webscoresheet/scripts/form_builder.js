@@ -1,4 +1,5 @@
-// LI YUE @ 01 Dec 2022 @ HAINAN, CHINA
+// LI YUE @ Dec 2022 @ HAINAN, CHINA
+// Sponsored by AISEC https://www.macs.hw.ac.uk/aisec/
 
 // global counter for additional offenses and prior records
 let ao_count     = 0;
@@ -678,8 +679,8 @@ function insert_legend (pElem, labelText) {
     lgd.innerText = labelText;
     pElem.appendChild(lgd);
 }
-function insert_span (pElem, text) {
-    const pg = document.createElement("span");
+function insert_para (pElem, text) {
+    const pg = document.createElement("p");
     pg.innerText = text;
     pElem.appendChild(pg);
 }
@@ -776,7 +777,7 @@ function primary_off () {
     insert_text_field(po_top,fieldId_PO.points);
     setTextFieldDefault(fieldId_PO.points,"4","readonly"); // default PO points : level 1 points = 4, read-only field
     // text note
-    insert_span(po_top,l2p_text.po);
+    insert_para(po_top,l2p_text.po);
 }
 function additional_off () {
     insert_legend(ao_top,legend_text.ao);
@@ -801,7 +802,7 @@ function additional_off () {
 
     new_emsp(ao_top);
     // text note
-    insert_span(ao_top,l2p_text.ao);
+    insert_para(ao_top,l2p_text.ao);
 }
 function victim_injury () {
     // create legend and fields
@@ -889,7 +890,7 @@ function prior_record () {
 
     new_emsp(pr_top);
     // text note
-    insert_span(pr_top,l2p_text.pr);
+    insert_para(pr_top,l2p_text.pr);
 }
 // AOP stands for Additional offense Or Prior record
 function add_AOP(param) {
@@ -1136,13 +1137,9 @@ function total_points () {
 }
 function sentence_comp () {
     insert_legend(sc_top,legend_text.sc);
-    const p1 = document.createElement("p");
-    p1.innerText = sc_1_text;
-    sc_top.appendChild(p1);
-    const p2 = document.createElement("p");
-    p2.innerText = sc_2_text;
-    sc_top.appendChild(p2);
-
+    insert_para(sc_top,sc_1_text);
+    insert_para(sc_top,sc_2_text);
+  
     insert_field_label(sc_top,fieldId_SC.tsp,fieldLabelText_SC.tsp,"");
     insert_text_field_NB(sc_top,fieldId_SC.tsp);
     insert_field_label(sc_top,fieldId_SC.m28,fieldLabelText_SC.m28,"");
@@ -1159,9 +1156,7 @@ function sentence_comp () {
     td75_postlabel.innerText = fieldLabelText_SC.td75post;
     sc_top.appendChild(td75_postlabel);
 
-    const p3 = document.createElement("p");
-    p3.innerText = sc_3_text;
-    sc_top.appendChild(p3);
+    insert_para(sc_top,sc_3_text);
 
     insert_field_label(sc_top,fieldId_SC.mx,fieldLabelText_SC.mx,"");
     insert_text_field(sc_top,fieldId_SC.mx);
@@ -1262,10 +1257,7 @@ function mitigating () {
     insert_checkbox(mi_top,fieldId_MI.r12,fieldLabelText_MI.r12);
     insert_checkbox(mi_top,fieldId_MI.r13,fieldLabelText_MI.r13);
     insert_checkbox(mi_top,fieldId_MI.r14,fieldLabelText_MI.r14);
-
-    const par = document.createElement("p");
-    par.innerText = mi_text;
-    mi_top.appendChild(par);
+    insert_para(mi_top,mi_text);
 }
 
 // call the fieldset builders
