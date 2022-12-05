@@ -358,8 +358,8 @@ const fieldId_PCSF = {
 const fieldLabelText_PCSF = {
     pcap_ck : "",
     pser_ck : "",
-    pcap : "Prior capital felony - 2 x (Primary + Add. Off. Points)" + label_text_suffix,
-    pser : "Prior serious felony - 30 Points" + label_text_suffix,
+    pcap : "Prior capital felony = 2 x (Primary + Add. Off. Points)" + label_text_suffix,
+    pser : "Prior serious felony = 30 Points" + label_text_suffix,
 };
 const fieldId_ST = {
     total : "TT_ST",
