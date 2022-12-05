@@ -1,0 +1,16 @@
+*[lang=zh-Hans] {
+    display : none;
+}
+
+form {
+      display : none;
+}
+
+a {
+    text-decoration: none;
+    color : black;
+}
+
+.sidebartext {
+    display : none;
+}
