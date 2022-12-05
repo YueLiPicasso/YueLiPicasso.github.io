@@ -539,7 +539,6 @@ function style_input_field(param) {
 	"border:none;" +
 	"font-size:100%;" +
 	"border-bottom:1px solid;" +
-	"background-color:white;" +
 	"margin:2px;" +
 	"padding:4px 1em;" ;
     const is_des =
