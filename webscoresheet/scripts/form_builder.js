@@ -534,13 +534,18 @@ const mi_top  = document.getElementById("MI");         // mitigating circum. con
 
 // utilities
 function style_input_field(param) {
-    const val =
-	  "border:none;" +
-	  "font-size:100%;" +
-	  "border-bottom:1px solid;" +
-	  "background-color:white;" +
-	  "padding:4px 1em;" +
-	  "margin:2px;";
+    let val =
+	"border:none;" +
+	"font-size:100%;" +
+	"border-bottom:1px solid;" +
+	"background-color:white;" +
+	"margin:2px;" +
+	"padding:4px 1em;" ;
+    const is_des =
+	  param.id.startsWith(fieldId_PO.description)  ||
+	  param.id.startsWith(fieldIdPrefix_AO.description)  ||
+	  param.id.startsWith(fieldIdPrefix_PR.description);
+    if (is_des) { val += "width:90%"; } // long description field
     param.setAttribute("style",val);
 }
 function style_input_button(param) {
@@ -873,7 +878,7 @@ function prior_record () {
     style_input_button(add_butt);
     pr_top.appendChild(add_butt);
     
-    new_emsp(pr_top);
+    // new_emsp(pr_top);
     
     const rm_butt = document.createElement("input");
     rm_butt.setAttribute("type","button");
