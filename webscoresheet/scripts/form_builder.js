@@ -941,6 +941,8 @@ function add_AOP(param) {
     // offense level
     insert_field_label(top,level,label.level,"");
     const level_field = insert_dropdown(top,level);
+    insert_option("CN","Count-only","",level_field); // prior plea of nolo contendre
+    insert_option("M","M","selected",level_field); // default level is M
     insert_option("1","1","",level_field); 
     insert_option("2","2","",level_field);
     insert_option("3","3","",level_field);
@@ -951,7 +953,6 @@ function add_AOP(param) {
     insert_option("8","8","",level_field);
     insert_option("9","9","",level_field);
     insert_option("10","10","",level_field);
-    insert_option("M","M","selected",level_field); // default level is M
     // level onchange event
     if (param == "AO") { level_field.setAttribute("onchange","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
     if (param == "PR") { level_field.setAttribute("onchange","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
@@ -1390,6 +1391,9 @@ function levelnCountsChange_AOP(param, cnt_str) {
 	points_field = document.getElementById(fieldIdPrefix_AO.points + cnt_str);
 	total_field  = document.getElementById(fieldIdPrefix_AO.total  + cnt_str);
 	switch (level_field.value) {
+	case "M":
+	    points = "0.2";
+	    break;
 	case "1":
 	    points = "0.7";
 	    break;
@@ -1420,8 +1424,8 @@ function levelnCountsChange_AOP(param, cnt_str) {
 	case "10":
 	    points = "58";
 	    break;
-	case "M":
-	    points = "0.2";
+	case "CN":
+	    points = "0.0";
 	}
     }
     if (param == "PR") {
@@ -1430,6 +1434,9 @@ function levelnCountsChange_AOP(param, cnt_str) {
 	points_field = document.getElementById(fieldIdPrefix_PR.points + cnt_str);
 	total_field  = document.getElementById(fieldIdPrefix_PR.total  + cnt_str);
 	switch (level_field.value) {
+	case "M":
+	    points = "0.2";
+	    break;
 	case "1":
 	    points = "0.5";
 	    break;
@@ -1460,8 +1467,8 @@ function levelnCountsChange_AOP(param, cnt_str) {
 	case "10":
 	    points = "29";
 	    break;
-	case "M":
-	    points = "0.2";
+	case "CN":
+	    points = "0.0";
 	}
     }
     // compute new field values 
@@ -1473,8 +1480,7 @@ function levelnCountsChange_AOP(param, cnt_str) {
     total = total_num.toFixed(1).toString();
     points_field.value = points;     // update points field
     total_field.value = total;       // update total field
-
-    refreshTotal_AOP(param);
+    refreshTotal_AOP(param);         // refresh toptotal for AO or PR
 }
 // refresh AO or PR total points upon adding/removing new items or modifying the level or counts of existing items
 function refreshTotal_AOP (param) {
