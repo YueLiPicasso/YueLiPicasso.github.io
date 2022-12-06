@@ -1139,7 +1139,7 @@ function sentence_comp () {
     insert_legend(sc_top,legend_text.sc);
     insert_para(sc_top,sc_1_text);
     insert_para(sc_top,sc_2_text);
-  
+    
     insert_field_label(sc_top,fieldId_SC.tsp,fieldLabelText_SC.tsp,"");
     insert_text_field_NB(sc_top,fieldId_SC.tsp);
     insert_field_label(sc_top,fieldId_SC.m28,fieldLabelText_SC.m28,"");
@@ -1281,57 +1281,57 @@ mitigating();      // Build mitigating circum. fields
 
 /* The on-the-fly update logic is like a cascade : 
 
-I.
---> levelChange_PO                        (primary offense level/points) 
--------> refresh_pcap                     (prior capital felony points)
-------------> refresh_ST                  (subtotal sentence points)
------------------> refresh_EH             (enhanced subtotal points)
-----------------------> refresh_TSP       (total sentence points)
+   I.
+   --> levelChange_PO                        (primary offense level/points) 
+   -------> refresh_pcap                     (prior capital felony points)
+   ------------> refresh_ST                  (subtotal sentence points)
+   -----------------> refresh_EH             (enhanced subtotal points)
+   ----------------------> refresh_TSP       (total sentence points)
 
-II./IV.
---> levelnCountsChange/add/remove_AOP     (single additional offense or prior record points)
--------> refreshTotal_AOP                 (additional offense or prior record total points)
-------------> refresh_pcap                *(prior capital felony points)
------------------> refresh_ST             (subtotal sentence points)
-----------------------> refresh_EH        (enhanced subtotal points)
----------------------------> refresh_TSP  (total sentence points)
+   II./IV.
+   --> levelnCountsChange/add/remove_AOP     (single additional offense or prior record points)
+   -------> refreshTotal_AOP                 (additional offense or prior record total points)
+   ------------> refresh_pcap                *(prior capital felony points)
+   -----------------> refresh_ST             (subtotal sentence points)
+   ----------------------> refresh_EH        (enhanced subtotal points)
+   ---------------------------> refresh_TSP  (total sentence points)
 
-III.
---> refresh_VI                            (victime injury points)
--------> refresh_ST                       (subtotal sentence points)
-------------> refresh_EH                  (enhanced subtotal points)
------------------> refresh_TSP            (total sentence points)
+   III.
+   --> refresh_VI                            (victime injury points)
+   -------> refresh_ST                       (subtotal sentence points)
+   ------------> refresh_EH                  (enhanced subtotal points)
+   -----------------> refresh_TSP            (total sentence points)
 
-V.
---> refresh_LS                            (legal status points)
--------> refresh_ST                       (subtotal sentence points)
-------------> refresh_EH                  (enhanced subtotal points)
------------------> refresh_TSP            (total sentence points)
+   V.
+   --> refresh_LS                            (legal status points)
+   -------> refresh_ST                       (subtotal sentence points)
+   ------------> refresh_EH                  (enhanced subtotal points)
+   -----------------> refresh_TSP            (total sentence points)
 
-VI.
---> refresh_CSV                           (community sanction violation points)
--------> refresh_ST                       (subtotal sentence points)
-------------> refresh_EH                  (enhanced subtotal points)
------------------> refresh_TSP            (total sentence points)
+   VI.
+   --> refresh_CSV                           (community sanction violation points)
+   -------> refresh_ST                       (subtotal sentence points)
+   ------------> refresh_EH                  (enhanced subtotal points)
+   -----------------> refresh_TSP            (total sentence points)
 
-VII.
---> refresh_FA                            (firearm or machine gun points)
----synonym.--> refresh_ST                 (subtotal sentence points) 
-------------------> refresh_EH            (enhanced subtotal points)
------------------------> refresh_TSP      (total sentence points)
+   VII.
+   --> refresh_FA                            (firearm or machine gun points)
+   ---synonym.--> refresh_ST                 (subtotal sentence points) 
+   ------------------> refresh_EH            (enhanced subtotal points)
+   -----------------------> refresh_TSP      (total sentence points)
 
-VIII.
---> refresh_pser                          (prior serious felony points)
--------> refresh_ST                       (subtotal sentence points)
-------------> refresh_EH                  (enhanced subtotal points)
------------------> refresh_TSP            (total sentence points)
+   VIII.
+   --> refresh_pser                          (prior serious felony points)
+   -------> refresh_ST                       (subtotal sentence points)
+   ------------> refresh_EH                  (enhanced subtotal points)
+   -----------------> refresh_TSP            (total sentence points)
 
---> refresh_pcap                          (prior capital felony points)
--------> refresh_ST                       (subtotal sentence points)
-------------> refresh_EH                  (enhanced subtotal points)
------------------> refresh_TSP            (total sentence points)
+   --> refresh_pcap                          (prior capital felony points)
+   -------> refresh_ST                       (subtotal sentence points)
+   ------------> refresh_EH                  (enhanced subtotal points)
+   -----------------> refresh_TSP            (total sentence points)
 
-And always, refresh_TSP --> refresh_SC    (sentence computation)
+   And always, refresh_TSP --> refresh_SC    (sentence computation)
 */
 
 function levelChange_PO () {
