@@ -68,7 +68,7 @@ const legend_text = {
     pr   : "IV. PRIOR RECORD",
     ls   : "V. Legal Status Violation = 4 Points",
     csv  : "VI. Community Sanction violation before the court for sentencing", 
-    fa   : "VII.",
+    fa   : "VII. Firearm or Semi-automatic Weapon = 18 or 25 Points",
     pcsf : "VIII.",
     st   : "",
     eh   : "IX. Enhancements (only if the primary offense qualifies for enhancement)",
@@ -156,7 +156,7 @@ const fieldLabelText_PREAMBLE = {
     gd  : "9. GENDER"            + label_text_suffix,
     nm  : "5. NAME (LAST, FIRST, MI.I.)" + label_text_suffix,
     rc  : "8. RACE"              + label_text_suffix,
-    sj  : "4. SENTENCING JUGDE"  + label_text_suffix,
+    sj  : "4. SENTENCING JUDGE"  + label_text_suffix,
     pdn : "11. PRIMARY DOCKET #"  + label_text_suffix,
     pn  : "2. PREPARER\'S NAME"  + label_text_suffix,
     pod : "10. PRIMARY OFF. DATE" + label_text_suffix,
@@ -346,9 +346,11 @@ const fieldLabelText_CSV = {
 };
 const fieldId_FA = {
     total : "TT_FA",
+    dropd : "DD_FA",
 };
 const fieldLabelText_FA = {
-    total : "Firearm\/Semi-Automatic or Machine Gun = 18 or 25 Points" + label_text_suffix,
+    total : "Points" + label_text_suffix,
+    dropd : "Please specifiy" + label_text_suffix,
 };
 const fieldId_PCSF = {
     pcap_ck : "PCAP_CK_PCSF",
@@ -398,16 +400,18 @@ const fieldLabelText_TSP = {
     total : "TOTAL SENTENCE POINTS" + label_text_suffix,
 };
 const fieldId_SC = {
-    tsp  : "TT_SC",
-    m28  : "M28_SC",
-    td75 : "TD75_SC",
-    mx   : "MX_SC",
+    tsp   : "TT_SC",
+    m28   : "M28_SC",
+    td75  : "TD75_SC",
+    td75y : "TD75Y_SC",
+    mx    : "MX_SC",
 };
 const fieldLabelText_SC = {
     tsp  : "Total Sentence Points" + label_text_suffix,
     m28  : label_text_prefix + "minus 28 =" + label_text_suffix,
     td75 : label_text_prefix + "x .75 =" + label_text_suffix,
     td75post : label_text_prefix + "Lowest Permissible Prison Sentence in Months",
+    td75y : "Lowest Permissible Prison Sentence in Years" + label_text_suffix,
     mx   : "Maximum Sentence in Years" + label_text_suffix,
 };
 const fieldId_TSI = {
@@ -451,7 +455,7 @@ const fieldLabelText_TSI = {
     check_ho : "habitual offender,",
     check_hv : "habitual violent offender,",
     check_vc : "violent career criminal,",
-    check_ro : "prison releasee reoffender, or a",
+    check_ro : "prison release reoffender, or a",
     check_mm : "mandatory minimum applies.",
     check_mi : "Mitigated Departure",
     check_pb : "Plea Bargain",
@@ -545,7 +549,7 @@ function style_input_field(param) {
 	  param.id.startsWith(fieldId_PO.description)  ||
 	  param.id.startsWith(fieldIdPrefix_AO.description)  ||
 	  param.id.startsWith(fieldIdPrefix_PR.description);
-    if (is_des) { val += "width:90%"; } // long description field
+    if (is_des) { val += "width:70%"; } // long description field
     param.setAttribute("style",val);
 }
 function style_input_button(param) {
@@ -571,7 +575,7 @@ function new_br(param) {
 function new_hr(param) {
     const hrl = document.createElement("hr");
     hrl.id = hrl_id_prefix + param;
-    hrl.setAttribute("style", "border-width:1px;border-style:dashed;");
+    hrl.setAttribute("style", "border:3px grey solid;"); 
     return hrl;
 }
 function new_emsp(top) {
@@ -646,6 +650,16 @@ function insert_text_field_NB(pElem,fId) {
     style_input_field(field);
     pElem.appendChild(field);
 }
+function insert_date_field (pElem,fId) {
+    const field = document.createElement("input");
+    field.setAttribute("type","text");
+    field.setAttribute("id",fId);
+    field.setAttribute("name",fId);
+    field.setAttribute("placeholder","mm \/ dd \/ yyyy");
+    style_input_field(field);
+    pElem.appendChild(field);
+    field.insertAdjacentElement("afterend",new_br(fId));
+}
 function insert_dropdown(pElem,fId) {
     const field = document.createElement("select");
     field.setAttribute("id",fId);
@@ -663,15 +677,6 @@ function insert_option(val,txt,sel,pElem) {
 	op.setAttribute("selected","selected");
     }
     pElem.appendChild(op);
-}
-function insert_date_input(pElem,fId) {
-    const field = document.createElement("input");
-    field.setAttribute("type","date");
-    field.setAttribute("id",fId);
-    field.setAttribute("name",fId);
-    style_input_field(field);
-    pElem.appendChild(field);
-    field.insertAdjacentElement("afterend",new_br(fId));
 }
 function insert_legend (pElem, labelText) {
     const lgd = document.createElement("legend");
@@ -702,7 +707,7 @@ function setTextFieldDefault (elemId,defVal,ro) {
 function preamble () {
     insert_legend(pa_top,legend_text.preamble);
     insert_field_label(pa_top,fieldId_PREAMBLE.dos,fieldLabelText_PREAMBLE.dos,"");
-    insert_date_input(pa_top,fieldId_PREAMBLE.dos);   
+    insert_date_field(pa_top,fieldId_PREAMBLE.dos);
     insert_field_label(pa_top,fieldId_PREAMBLE.pn,fieldLabelText_PREAMBLE.pn,"");
     insert_text_field(pa_top,fieldId_PREAMBLE.pn);
     insert_field_label(pa_top,fieldId_PREAMBLE.cty,fieldLabelText_PREAMBLE.cty,"");
@@ -712,7 +717,7 @@ function preamble () {
     insert_field_label(pa_top,fieldId_PREAMBLE.nm,fieldLabelText_PREAMBLE.nm,"");
     insert_text_field(pa_top,fieldId_PREAMBLE.nm);
     insert_field_label(pa_top,fieldId_PREAMBLE.dob,fieldLabelText_PREAMBLE.dob,"");
-    insert_date_input(pa_top,fieldId_PREAMBLE.dob);
+    insert_date_field(pa_top,fieldId_PREAMBLE.dob);
     insert_field_label(pa_top,fieldId_PREAMBLE.dc,fieldLabelText_PREAMBLE.dc,"");
     insert_text_field(pa_top,fieldId_PREAMBLE.dc);
     insert_field_label(pa_top,fieldId_PREAMBLE.rc,fieldLabelText_PREAMBLE.rc,"");
@@ -725,7 +730,7 @@ function preamble () {
     insert_option(gender_value_M,gender_text_M,"",gender_field);
     insert_option(gender_value_F,gender_text_F,"",gender_field);
     insert_field_label(pa_top,fieldId_PREAMBLE.pod,fieldLabelText_PREAMBLE.pod,"");
-    insert_date_input(pa_top,fieldId_PREAMBLE.pod);
+    insert_date_field(pa_top,fieldId_PREAMBLE.pod);
     insert_field_label(pa_top,fieldId_PREAMBLE.pdn,fieldLabelText_PREAMBLE.pdn,"");
     insert_text_field(pa_top,fieldId_PREAMBLE.pdn);
     insert_field_label(pa_top,fieldId_PREAMBLE.pot,fieldLabelText_PREAMBLE.pot,"");
@@ -1072,14 +1077,20 @@ function cs_violation () {
     document.getElementById(fieldId_CSV.tw).setAttribute("oninput","refresh_CSV()");
     document.getElementById(fieldId_CSV.tf).setAttribute("oninput","refresh_CSV()");
 }
-function firearm () {
+function firearm () { 
+    // legend
     insert_legend(fa_top,legend_text.fa);
+    // dropdown list 
+    insert_field_label(fa_top,fieldId_FA.dropd,fieldLabelText_FA.dropd,"");
+    const dropd_field_FA = insert_dropdown(fa_top,fieldId_FA.dropd);
+    insert_option("0","Not Applicable","selected",dropd_field_FA); // default N/A 
+    insert_option("18","Firearm","",dropd_field_FA);
+    insert_option("25","Semi-Automatic or Machine Gun","",dropd_field_FA);
+    dropd_field_FA.setAttribute("onchange","new_select_FA()");
+    // points
     insert_field_label(fa_top,fieldId_FA.total,fieldLabelText_FA.total,"");
-    const total_field_FA = insert_dropdown(fa_top,fieldId_FA.total);
-    insert_option("0","0","selected",total_field_FA); // default zero
-    insert_option("18","18","",total_field_FA);
-    insert_option("25","25","",total_field_FA);
-    total_field_FA.setAttribute("onchange","refresh_ST()");
+    insert_text_field(fa_top,fieldId_FA.total);
+    setTextFieldDefault(fieldId_FA.total,"0","readonly"); // default zero
 }
 function prior_cs_felony () {
     insert_legend(pcs_top,legend_text.pcsf);
@@ -1144,20 +1155,24 @@ function sentence_comp () {
     insert_text_field_NB(sc_top,fieldId_SC.tsp);
     insert_field_label(sc_top,fieldId_SC.m28,fieldLabelText_SC.m28,"");
     insert_text_field_NB(sc_top,fieldId_SC.m28);
+    // minimum in months
     insert_field_label(sc_top,fieldId_SC.td75,fieldLabelText_SC.td75,"");
     insert_text_field_NB(sc_top,fieldId_SC.td75);
-
-    setTextFieldDefault(fieldId_SC.tsp,"","readonly");  // default : null
-    setTextFieldDefault(fieldId_SC.m28,"","readonly");  // default : null
-    setTextFieldDefault(fieldId_SC.td75,"","readonly"); // default : null
-    
     const td75_postlabel = document.createElement("label");
     td75_postlabel.setAttribute("for",fieldId_SC.td75);
     td75_postlabel.innerText = fieldLabelText_SC.td75post;
     sc_top.appendChild(td75_postlabel);
+    sc_top.appendChild(new_br(fieldId_SC.td75));
+    // minimum in years
+    insert_field_label(sc_top,fieldId_SC.td75y,fieldLabelText_SC.td75y,"");
+    insert_text_field_NB(sc_top,fieldId_SC.td75y);
+
+    setTextFieldDefault(fieldId_SC.tsp,"","readonly");   // default : null
+    setTextFieldDefault(fieldId_SC.m28,"","readonly");   // default : null
+    setTextFieldDefault(fieldId_SC.td75,"","readonly");  // default : null
+    setTextFieldDefault(fieldId_SC.td75y,"","readonly"); // default : null
 
     insert_para(sc_top,sc_3_text);
-
     insert_field_label(sc_top,fieldId_SC.mx,fieldLabelText_SC.mx,"");
     insert_text_field(sc_top,fieldId_SC.mx);
 }
@@ -1315,8 +1330,8 @@ mitigating();      // Build mitigating circum. fields
    -----------------> refresh_TSP            (total sentence points)
 
    VII.
-   --> refresh_FA                            (firearm or machine gun points)
-   ---synonym.--> refresh_ST                 (subtotal sentence points) 
+   --> new_select_FA                         (firearm or machine gun points)
+   -------------> refresh_ST                 (subtotal sentence points) 
    ------------------> refresh_EH            (enhanced subtotal points)
    -----------------------> refresh_TSP      (total sentence points)
 
@@ -1560,6 +1575,12 @@ function refresh_CSV () {
     total.value = new_total.toString();
     refresh_ST(); // refresh subtotal sentence points
 }
+function new_select_FA () {
+    const sel = document.getElementById(fieldId_FA.dropd);
+    const pnt = document.getElementById(fieldId_FA.total);
+    pnt.value = sel.value;
+    refresh_ST();
+}
 function refresh_pser () {
     const pser_ck = document.getElementById(fieldId_PCSF.pser_ck);
     const pser    = document.getElementById(fieldId_PCSF.pser);
@@ -1638,7 +1659,9 @@ function refresh_SC () {
 	document.getElementById(fieldId_SC.m28).value =
 	    (tol_TSP - 28).toFixed(2).toString();
 	document.getElementById(fieldId_SC.td75).value =
-	    (0.75 * (tol_TSP - 28)).toFixed(2).toString();	
+	    (0.75 * (tol_TSP - 28)).toFixed(2).toString();
+	document.getElementById(fieldId_SC.td75y).value =
+	    ((0.75 * (tol_TSP - 28)) / 12).toFixed(2).toString();
     }
     if (tol_TSP <= 44) {
 	document.getElementById(fieldId_SC.tsp).value = ""; 
