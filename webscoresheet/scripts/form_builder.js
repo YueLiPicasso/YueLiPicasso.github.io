@@ -40,17 +40,11 @@ const qualifier_value_R = "R";
 const qualifier_text_N  = "Not Applicable";
 const qualifier_value_N = "NA";
 const degree_text_FL    = "Life F.";
-const degree_value_FL   = "FL";
 const degree_text_F1    = "1st F.";
-const degree_value_F1   = "F1";
 const degree_text_F2    = "2nd F.";
-const degree_value_F2   = "F2";
 const degree_text_F3    = "3rd F.";
-const degree_value_F3   = "F3";
 const degree_text_M1    = "1st M.";
-const degree_value_M1   = "M1";
 const degree_text_M2    = "2nd M.";
-const degree_value_M2   = "M2";
 const total_text        = "TOTAL";
 const level_text        = "OFFENSE LEVEL";
 const desc_text         = "DESCRIPTION";
@@ -105,7 +99,37 @@ const mi_text =
       "does not justify a downward departure from the lowest permissible sentence, " +
       "except for the provisions of s. 921.0026(2)(m). Effective Date: For offenses " +
       "committed under the Criminal Punishment Code effective for offenses " +
-      "committed on or after October 1, 1998 and subsequent revisions."
+      "committed on or after October 1, 1998 and subsequent revisions.";
+// maximum prison sentence in years
+const F1_mx = "30";
+const F2_mx = "15";
+const F3_mx = "5" ;
+
+/**********************************************
+*   offenses supported by the scoresheet app  *
+***********************************************/
+
+const statute_ref = {
+    r0001 : "316.193(2)(b)"       ,
+    r0002 : "316.193(3)(c)2."     ,
+    r0003 : "316.193(3)(c)3.a."   ,
+    r0004 : "316.193(3)(c)3.b."   ,
+};
+const statute_desc = {
+    r0001a : "Felony DUI, 3rd conviction."                ,
+    r0001b : "Felony DUI, 4th or subsequent conviction."  ,
+    r0002  : "DUI resulting in serious bodily injury."    ,
+    r0003  : "DUI manslaughter."                          ,
+    r0004  : "DUI manslaughter; failing to render aid or give information."  ,
+};
+function load_offenses (selElem) {
+    insert_option("","Please select","selected",selElem);
+    insert_option_TITLE(statute_desc.r0001a +"\n" +
+			statute_desc.r0001b,statute_ref.r0001,"",selElem);
+    insert_option_TITLE(statute_desc.r0002, statute_ref.r0002,"",selElem);
+    insert_option_TITLE(statute_desc.r0003, statute_ref.r0003,"",selElem);
+    insert_option_TITLE(statute_desc.r0004, statute_ref.r0004,"",selElem);
+}
 /*
   The ideas of namespaces and modules are used to organise the id's
   The name spaces are:
@@ -545,11 +569,6 @@ function style_input_field(param) {
 	"border-bottom:1px solid;" +
 	"margin:2px;" +
 	"padding:4px 1em;" ;
-    const is_des =
-	  param.id.startsWith(fieldId_PO.description)  ||
-	  param.id.startsWith(fieldIdPrefix_AO.description)  ||
-	  param.id.startsWith(fieldIdPrefix_PR.description);
-    if (is_des) { val += "width:70%"; } // long description field
     param.setAttribute("style",val);
 }
 function style_input_button(param) {
@@ -678,6 +697,17 @@ function insert_option(val,txt,sel,pElem) {
     }
     pElem.appendChild(op);
 }
+// option with title (value = text, by default)
+function insert_option_TITLE(tl,val,sel,pElem) {
+    const op = document.createElement("option");
+    op.setAttribute("title",tl);
+    op.setAttribute("value",val);
+    op.innerText = val;
+    if (sel == "selected") {
+	op.setAttribute("selected","selected");
+    }
+    pElem.appendChild(op);
+}
 function insert_legend (pElem, labelText) {
     const lgd = document.createElement("legend");
     lgd.innerText = labelText;
@@ -703,7 +733,10 @@ function setTextFieldDefault (elemId,defVal,ro) {
 	field.setAttribute("readonly","readonly");
     }
 }
-// fieldset builders
+/***********************************
+*         fieldset builders        *
+***********************************/
+
 function preamble () {
     insert_legend(pa_top,legend_text.preamble);
     insert_field_label(pa_top,fieldId_PREAMBLE.dos,fieldLabelText_PREAMBLE.dos,"");
@@ -740,7 +773,24 @@ function preamble () {
 }
 function primary_off () {
     insert_legend(po_top,legend_text.po);
-    // qualifier
+    // Florida statute reference
+    insert_field_label(po_top,fieldId_PO.fsr,fieldLabelText_PO.fsr,"");
+    const fsr_field_PO = insert_dropdown(po_top,fieldId_PO.fsr);
+    load_offenses(fsr_field_PO);
+    fsr_field_PO.setAttribute("onchange","statuteRefChange_PO()");
+    // description
+    insert_field_label(po_top,fieldId_PO.description,fieldLabelText_PO.description,"");
+    const desc_field_PO = insert_dropdown(po_top,fieldId_PO.description);
+    desc_field_PO.setAttribute("onchange","descChange_PO()");
+    // degree
+    insert_field_label(po_top,fieldId_PO.degree,fieldLabelText_PO.degree,"");
+    insert_text_field(po_top,fieldId_PO.degree);
+    setTextFieldDefault(fieldId_PO.degree,"","readonly");
+    // offense level
+    insert_field_label(po_top,fieldId_PO.level,fieldLabelText_PO.level,"");
+    insert_text_field(po_top,fieldId_PO.level);
+    setTextFieldDefault(fieldId_PO.level,"","readonly");
+     // qualifier
     insert_field_label(po_top,fieldId_PO.qualifier,fieldLabelText_PO.qualifier,"");
     const qualifier_field_PO = insert_dropdown(po_top,fieldId_PO.qualifier);
     insert_option(qualifier_value_A,qualifier_text_A,"",qualifier_field_PO);
@@ -748,38 +798,10 @@ function primary_off () {
     insert_option(qualifier_value_C,qualifier_text_C,"",qualifier_field_PO);
     insert_option(qualifier_value_R,qualifier_text_R,"",qualifier_field_PO);
     insert_option(qualifier_value_N,qualifier_text_N,"selected",qualifier_field_PO);
-    // degree
-    insert_field_label(po_top,fieldId_PO.degree,fieldLabelText_PO.degree,"");
-    const degree_field_PO = insert_dropdown(po_top,fieldId_PO.degree);
-    insert_option(degree_value_FL,degree_text_FL,"",degree_field_PO);
-    insert_option(degree_value_F1,degree_text_F1,"",degree_field_PO);
-    insert_option(degree_value_F2,degree_text_F2,"",degree_field_PO);
-    insert_option(degree_value_F3,degree_text_F3,"selected",degree_field_PO); // Default PO degree : 3rd F. 
-    // Florida statute reference
-    insert_field_label(po_top,fieldId_PO.fsr,fieldLabelText_PO.fsr,"");
-    insert_text_field(po_top,fieldId_PO.fsr);
-    // description
-    insert_field_label(po_top,fieldId_PO.description,fieldLabelText_PO.description,"");
-    insert_text_field(po_top,fieldId_PO.description);
-    // offense level
-    insert_field_label(po_top,fieldId_PO.level,fieldLabelText_PO.level,"");
-    const level_field_PO = insert_dropdown(po_top,fieldId_PO.level);
-    insert_option("1","1","selected",level_field_PO); // default PO level : 1
-    insert_option("2","2","",level_field_PO);
-    insert_option("3","3","",level_field_PO);
-    insert_option("4","4","",level_field_PO);
-    insert_option("5","5","",level_field_PO);
-    insert_option("6","6","",level_field_PO);
-    insert_option("7","7","",level_field_PO);
-    insert_option("8","8","",level_field_PO);
-    insert_option("9","9","",level_field_PO);
-    insert_option("10","10","",level_field_PO);
-    // level field onchange Event : update the points field
-    level_field_PO.setAttribute("onchange","levelChange_PO()");
     // points for one count of the primary offense
     insert_field_label(po_top,fieldId_PO.points,fieldLabelText_PO.points,"");
     insert_text_field(po_top,fieldId_PO.points);
-    setTextFieldDefault(fieldId_PO.points,"4","readonly"); // default PO points : level 1 points = 4, read-only field
+    setTextFieldDefault(fieldId_PO.points,"0","readonly"); // default 0; read-only
     // text note
     insert_para(po_top,l2p_text.po);
 }
@@ -928,39 +950,19 @@ function add_AOP(param) {
     // docket
     insert_field_label(top,docket,label.docket,"hr");
     insert_text_field(top,docket);
-    // degree
-    insert_field_label(top,degree,label.degree,"");
-    const degree_field = insert_dropdown(top,degree);
-    insert_option(degree_value_FL,degree_text_FL,"",degree_field);
-    insert_option(degree_value_F1,degree_text_F1,"",degree_field);
-    insert_option(degree_value_F2,degree_text_F2,"",degree_field);
-    insert_option(degree_value_F3,degree_text_F3,"",degree_field);
-    insert_option(degree_value_M1,degree_text_M1,"",degree_field);
-    insert_option(degree_value_M2,degree_text_M2,"selected",degree_field); // match default level M
     // Florida statute reference
     insert_field_label(top,fsr,label.fsr,"");
-    insert_text_field(top,fsr);
+    const fsr_field = insert_dropdown(top,fsr);
+    load_offenses(fsr_field);
+    // fsr onchange event
+    if (param == "AO") { fsr_field.setAttribute("onchange","statuteRefChange_AOP(\"AO\"," + ao_count_str + ")"); }
+    if (param == "PR") { fsr_field.setAttribute("onchange","statuteRefChange_AOP(\"PR\"," + pr_count_str + ")"); }
     // description
     insert_field_label(top,description,label.description,"");
-    insert_text_field(top,description);
-    // offense level
-    insert_field_label(top,level,label.level,"");
-    const level_field = insert_dropdown(top,level);
-    insert_option("CN","Count-only","",level_field); // prior plea of nolo contendre
-    insert_option("M","M","selected",level_field); // default level is M
-    insert_option("1","1","",level_field); 
-    insert_option("2","2","",level_field);
-    insert_option("3","3","",level_field);
-    insert_option("4","4","",level_field);
-    insert_option("5","5","",level_field);
-    insert_option("6","6","",level_field);
-    insert_option("7","7","",level_field);
-    insert_option("8","8","",level_field);
-    insert_option("9","9","",level_field);
-    insert_option("10","10","",level_field);
-    // level onchange event
-    if (param == "AO") { level_field.setAttribute("onchange","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
-    if (param == "PR") { level_field.setAttribute("onchange","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
+    const desc_field = insert_dropdown(top,description);
+    // description onchange event
+    if (param == "AO") { desc_field.setAttribute("onchange","descChange_AOP(\"AO\"," + ao_count_str + ")"); }
+    if (param == "PR") { desc_field.setAttribute("onchange","descChange_AOP(\"PR\"," + pr_count_str + ")"); }
     // qualifier
     insert_field_label(top,qualifier,label.qualifier,"");
     const qualifier_field = insert_dropdown(top,qualifier);
@@ -969,22 +971,30 @@ function add_AOP(param) {
     insert_option(qualifier_value_C,qualifier_text_C,"",qualifier_field);
     insert_option(qualifier_value_R,qualifier_text_R,"",qualifier_field);
     insert_option(qualifier_value_N,qualifier_text_N,"selected",qualifier_field);
+    // degree
+    insert_field_label(top,degree,label.degree,"");
+    insert_text_field(top,degree);
+    setTextFieldDefault(degree,"","readonly");
+    // offense level
+    insert_field_label(top,level,label.level,"");
+    insert_text_field(top,level);
+    setTextFieldDefault(level,"","readonly");
     // counts
     insert_field_label(top,counts,label.counts,"");
     insert_text_field(top,counts);
     setTextFieldDefault(counts,"1","");  // default counts is 1
     // counts oninput event
     const counts_field = document.getElementById(counts);
-    if (param == "AO") { counts_field.setAttribute("oninput","levelnCountsChange_AOP(\"AO\"," + ao_count_str + ")"); }
-    if (param == "PR") { counts_field.setAttribute("oninput","levelnCountsChange_AOP(\"PR\"," + pr_count_str + ")"); }
+    if (param == "AO") { counts_field.setAttribute("oninput","updateItemSubtotal_AOP(\"AO\"," + ao_count_str + ")"); }
+    if (param == "PR") { counts_field.setAttribute("oninput","updateItemSubtotal_AOP(\"PR\"," + pr_count_str + ")"); }
     // points for one count of the offense
     insert_field_label(top,points,label.points,"");
     insert_text_field(top,points);
-    setTextFieldDefault(points,"0.2","readonly"); // default points is for level M : 0.2; read-only field. Note that only level M points are the same for AO and PR, but not other levels
+    setTextFieldDefault(points,"0.0","readonly"); // default 0; read-only 
     // total points of the item
     insert_field_label(top,total,label.total,"");
     insert_text_field(top,total);
-    setTextFieldDefault(total,"0.2","readonly"); // default total is one count of level M; read-only
+    setTextFieldDefault(total,"0.0","readonly"); // default 0; read-only
     // refresh top total for AOP
     refreshTotal_AOP(param);
 }
@@ -1115,7 +1125,7 @@ function subtotal_points () {
     insert_legend(st_top,legend_text.st);
     insert_field_label(st_top,fieldId_ST.total,fieldLabelText_ST.total,"");
     insert_text_field(st_top,fieldId_ST.total);
-    setTextFieldDefault(fieldId_ST.total,"4","readonly"); // default : 4
+    setTextFieldDefault(fieldId_ST.total,"0","readonly"); // default : 0
 }
 function enhancements () {
     insert_legend(eh_top,legend_text.eh);
@@ -1144,7 +1154,7 @@ function total_points () {
     insert_legend(tsp_top,legend_text.tsp);
     insert_field_label(tsp_top,fieldId_TSP.total,fieldLabelText_TSP.total,"");
     insert_text_field(tsp_top,fieldId_TSP.total);
-    setTextFieldDefault(fieldId_TSP.total,"4","readonly"); // default : 4
+    setTextFieldDefault(fieldId_TSP.total,"0","readonly"); // default : 0
 }
 function sentence_comp () {
     insert_legend(sc_top,legend_text.sc);
@@ -1292,19 +1302,127 @@ sentence_comp();   // Build sentence computation fields
 sent_imposed();    // Build total sentence imposed fields
 mitigating();      // Build mitigating circum. fields
 
-// Event handlers
+
+/***************************************************************************
+*  critical conversion from statute ref. to description, level and degree  *
+***************************************************************************/
+
+// dtermine description from statute reference 
+function updateDesc (fsr_field,desc_field) {
+    // remove existing options from the description dropdown
+    while (desc_field.hasChildNodes()) {
+	desc_field.removeChild(desc_field.firstChild);
+    }
+    // add new options for the desccription dropdown
+    switch (fsr_field.value) {
+    case statute_ref.r0001 :
+	insert_option(statute_desc.r0001a,statute_desc.r0001a,"selected",desc_field);
+	insert_option(statute_desc.r0001b,statute_desc.r0001b,"",desc_field);
+	break;
+    case statute_ref.r0002 :
+	insert_option(statute_desc.r0002,statute_desc.r0002,"selected",desc_field);
+	break;
+    case statute_ref.r0003 :
+	insert_option(statute_desc.r0003,statute_desc.r0003,"selected",desc_field);
+	break;
+    case statute_ref.r0004 :
+	insert_option(statute_desc.r0004,statute_desc.r0004,"selected",desc_field);
+	break;	
+    }
+}
+// determine offense level from description 
+function updateLevel (desc_field,level_field) {
+    switch (desc_field.value) {
+    case statute_desc.r0001a :
+	level_field.value = "3";
+	break;
+    case statute_desc.r0001b :
+	level_field.value = "6";
+	break;
+    case statute_desc.r0002 :
+	level_field.value = "7";
+	break;
+    case statute_desc.r0003 :
+	level_field.value = "8";
+	break;
+    case statute_desc.r0004 :
+	level_field.value = "9";
+	break;
+    default :
+	level_field.value = "";
+    }
+}
+// determine offense degree from description
+function updateDegree (desc_field,degree_field) {
+    switch (desc_field.value) {
+    case statute_desc.r0001a :
+	degree_field.value = degree_text_F3;
+	break;
+    case statute_desc.r0001b :
+	degree_field.value = degree_text_F3;
+	break;
+    case statute_desc.r0002 :
+	degree_field.value = degree_text_F3;
+	break;
+    case statute_desc.r0003 :
+	degree_field.value = degree_text_F2;
+	break;
+    case statute_desc.r0004 :
+	degree_field.value = degree_text_F1;
+	break;
+    default :
+	degree_field.value = "";
+    }
+}
+function update_maximum_sentence () {
+    const degree_field_PO = document.getElementById(fieldId_PO.degree);
+    const mx_field        = document.getElementById(fieldId_SC.mx);
+    switch (degree_field_PO.value) {
+    case degree_text_F1 :
+	mx_field.value = F1_mx;
+	break;
+    case degree_text_F2 :
+	mx_field.value = F2_mx;
+	break;
+    case degree_text_F3 :
+	mx_field.value = F3_mx;
+	break;
+    default :
+	mx_field.value = "";
+    }
+}
+/***********************************
+* section specific event handlers  *
+***********************************/
 
 /* The on-the-fly update logic is like a cascade : 
 
    I.
-   --> levelChange_PO                        (primary offense level/points) 
-   -------> refresh_pcap                     (prior capital felony points)
-   ------------> refresh_ST                  (subtotal sentence points)
-   -----------------> refresh_EH             (enhanced subtotal points)
-   ----------------------> refresh_TSP       (total sentence points)
+   --> statuteRefChange_PO                   (statute reference)
+   -----> updateDesc_PO                      (possible descriptions)
 
+   --> updateDesc/descChange_PO              (description)
+   ------> updateDegree_PO                   (offense degree)
+   -------------> update_maximum_sentence    (maximum sentence)
+   ------> updateLevel_PO                    (offense level)
+   -------------> updatePoints_PO            (primary offense points) 
+   ----------------> refresh_pcap            (prior capital felony points)
+   ------------------> refresh_ST            (subtotal sentence points)
+   ---------------------> refresh_EH         (enhanced subtotal points)
+   -----------------------> refresh_TSP      (total sentence points)
+
+   
    II./IV.
-   --> levelnCountsChange/add/remove_AOP     (single additional offense or prior record points)
+
+   --> statuteRefChange_AOP                  (statute reference)
+   -----> updateDesc_AOP                     (possible descriptions)
+
+   --> updateDesc/descChange_AOP             (description)
+   ------> updateLevel_AOP                   (offense level)
+   -------------> updateItemSubtotal_AOP     (additional offense or prior record item points)
+   ------> updateDegree_AOP                  (offense degree)
+
+   --> updateItemSubtotal/add/remove_AOP     (single additional offense or prior record points)
    -------> refreshTotal_AOP                 (additional offense or prior record total points)
    ------------> refresh_pcap                *(prior capital felony points)
    -----------------> refresh_ST             (subtotal sentence points)
@@ -1349,7 +1467,36 @@ mitigating();      // Build mitigating circum. fields
    And always, refresh_TSP --> refresh_SC    (sentence computation)
 */
 
-function levelChange_PO () {
+// Primary offense 
+function statuteRefChange_PO () {
+    updateDesc_PO();
+}
+// updated by machine
+function updateDesc_PO () {
+    const desc_field_PO = document.getElementById(fieldId_PO.description);
+    const fsr_field_PO  = document.getElementById(fieldId_PO.fsr);
+    updateDesc(fsr_field_PO,desc_field_PO);
+    updateLevel_PO();
+    updateDegree_PO();
+}
+// changed by user
+function descChange_PO () {
+    updateLevel_PO();
+    updateDegree_PO();
+}
+function updateLevel_PO () {
+    const desc_field_PO  = document.getElementById(fieldId_PO.description);
+    const level_field_PO = document.getElementById(fieldId_PO.level);
+    updateLevel(desc_field_PO,level_field_PO);
+    updatePoints_PO();
+} 
+function updateDegree_PO () {
+    const desc_field_PO   = document.getElementById(fieldId_PO.description);
+    const degree_field_PO = document.getElementById(fieldId_PO.degree);
+    updateDegree(desc_field_PO,degree_field_PO);
+    update_maximum_sentence();
+}
+function updatePoints_PO () {
     const level_field_PO = document.getElementById(fieldId_PO.level);
     const points_field_PO = document.getElementById(fieldId_PO.points);
     let points = undefined;
@@ -1383,11 +1530,67 @@ function levelChange_PO () {
 	break;
     case "10":
 	points = "116";
+	break;
+    default :
+	points = "0";
     }
     points_field_PO.value = points;
     refresh_pcap(); // refresh prior capital felony points
 }
-function levelnCountsChange_AOP(param, cnt_str) {
+
+// additional offense and prior records
+function statuteRefChange_AOP (param,cnt_str) {
+    updateDesc_AOP(param,cnt_str);
+}
+// see PO for the difference between "update" and "change"
+function updateDesc_AOP (param,cnt_str) {
+    let desc_field = undefined;
+    let fsr_field  = undefined;
+    if (param == "AO") {
+	desc_field = document.getElementById(fieldIdPrefix_AO.description + cnt_str);
+	fsr_field  = document.getElementById(fieldIdPrefix_AO.fsr + cnt_str);
+    }
+     if (param == "PR") {
+	desc_field = document.getElementById(fieldIdPrefix_PR.description + cnt_str);
+	fsr_field  = document.getElementById(fieldIdPrefix_PR.fsr + cnt_str);
+    }
+    updateDesc(fsr_field,desc_field);
+    updateLevel_AOP(param,cnt_str);
+    updateDegree_AOP(param,cnt_str);
+}
+function descChange_AOP (param,cnt_str) {
+    updateLevel_AOP(param,cnt_str);
+    updateDegree_AOP(param,cnt_str);
+}
+function updateLevel_AOP (param,cnt_str) {
+    let desc_field  = undefined;
+    let level_field = undefined;
+    if (param == "AO") {
+	desc_field  = document.getElementById(fieldIdPrefix_AO.description + cnt_str);
+	level_field = document.getElementById(fieldIdPrefix_AO.level + cnt_str);
+    }
+    if (param == "PR") {
+	desc_field  = document.getElementById(fieldIdPrefix_PR.description + cnt_str);
+	level_field = document.getElementById(fieldIdPrefix_PR.level + cnt_str);
+     }
+    updateLevel(desc_field,level_field);
+    updateItemSubtotal_AOP(param, cnt_str);
+} 
+function updateDegree_AOP (param,cnt_str) {
+    let desc_field  = undefined;
+    let degree_field = undefined;
+    if (param == "AO") {
+	desc_field   = document.getElementById(fieldIdPrefix_AO.description + cnt_str);
+	degree_field = document.getElementById(fieldIdPrefix_AO.degree + cnt_str);
+    }
+    if (param == "PR") {
+	desc_field   = document.getElementById(fieldIdPrefix_PR.description + cnt_str);
+	degree_field = document.getElementById(fieldIdPrefix_PR.degree + cnt_str);
+     }
+    updateDegree(desc_field,degree_field);
+}
+// update unit points and item subtotal
+function updateItemSubtotal_AOP(param, cnt_str) {
     // possibly changed fields
     let level_field  = undefined;
     let counts_field = undefined;
@@ -1439,7 +1642,7 @@ function levelnCountsChange_AOP(param, cnt_str) {
 	case "10":
 	    points = "58";
 	    break;
-	case "CN":
+	default :
 	    points = "0.0";
 	}
     }
@@ -1482,7 +1685,7 @@ function levelnCountsChange_AOP(param, cnt_str) {
 	case "10":
 	    points = "29";
 	    break;
-	case "CN":
+	default :
 	    points = "0.0";
 	}
     }
@@ -1667,5 +1870,6 @@ function refresh_SC () {
 	document.getElementById(fieldId_SC.tsp).value = ""; 
 	document.getElementById(fieldId_SC.m28).value = "";
 	document.getElementById(fieldId_SC.td75).value = "";
+	document.getElementById(fieldId_SC.td75y).value = "";
     }
 }
