@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Florida DUI Fine Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <script type="application/javascript" src="florida.js"></script>
+    <style>
+      h1 { text-align : center; }
+      p { background-color : lightgrey;
+	  font-size : 20px;
+	  margin :  5px 20%;
+	  padding : 20px; }
+      pre { text-align : center; font-size : 20px;  margin : 20px 0;}
+      form { margin : 0 20%; }
+      label { font-size: 20px; }
+      button  { margin : 1vw;
+		font-size : 20px;
+	        padding : 10px; }
+      input, select { font-size: 20px;
+		      padding:10px;}
+      .col-1 {
+	  float: left;
+	  width: 70%;
+	  margin-top: 20px;
+      }
+      .col-2 {
+	  float: left;
+	  width: 30%;
+	  margin-top: 20px;
+      }
+      .col-3 {
+	  float: left;
+	  width: 5%;
+	  margin-top: 20px;
+      }
+
+      .col-4 {
+	  float: left;
+	  width: 95%;
+	  margin-top: 20px;
+      }
+      /* Clear floats after the columns */
+      .row:after {
+	  content: "";
+	  display: table;
+	  clear: both;
+      }
+      @media screen and (max-width: 1000px) {
+	  h1 { font-size : 8vw; }
+	  form { margin : 0 5%; }
+	  p { background-color : lightgrey;
+	      font-size : 4vw;
+	      margin :  5px 5%;
+	      padding : 20px;
+	    }
+	  pre { text-align : center; font-size : 4vw;  margin : 2vw 0;}
+	  label { font-size: 4vw; }
+	  input, select { font-size: 4vw;
+			  margin:2vw;}
+	  button  { margin : 1vw;
+		    font-size : 4vw;
+		    width : 100%;}
+	  .col-1, .col-2 {
+	      width: 100%;
+	      margin-top: 0;
+	  }
+	  .col-3 {
+	      width: 15%;
+	      margin-top: 0;
+	  }
+	  .col-4 {
+	      width: 80%;
+	      margin-top: 0;
+	  }   
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Florida DUI Fine Calculator 2022</h1>
+    <p>This is a calculator for Florida DUI fines. Please select from the statements below which best describe your DUI offense pending before the court for prosecution, and then click the "Submit" button. The computed minimum/maximum fine shall be printed.</p>
+    <form id="fineCalc">
+
+      <div class="row">
+	<div class="col-1">
+	  <label for="date_of_instant_offense">Date of the DUI Offense</label>
+	</div>
+	<div class="col-2">
+	  <input type="date" id="date_of_instant_offense" name="date_of_instant_offense">
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-1">
+	  <label for="blood_alcohol_level">Blood Alcohol Level (grams of alcohol per 100 milliliters of blood)</label>
+	</div>
+	<div class="col-2">
+	  <select id="blood_alcohol_level">
+	    <option value="NA">I did not take this test</option>
+	    <option value="0.07">0.07 or below</option>
+	    <option value="0.08">0.08</option>
+	    <option value="0.09">0.09</option>
+	    <option value="0.10">0.10</option>
+	    <option value="0.11">0.11</option>
+	    <option value="0.12">0.12</option>
+	    <option value="0.13">0.13</option>
+	    <option value="0.14">0.14</option>
+	    <option value="0.15000000000000001">0.15</option> <?- to avoid a floating point trap->
+	    <option value="0.16">0.16</option>
+	    <option value="0.17">0.17 or above</option>
+	  </select>
+	</div>
+      </div>
+      
+      <div class="row">
+	<div class="col-1">
+	  <label for="breath_alcohol_level">Breath Alcohol Level (grams of alcohol per 210 liters of breath)</label>	 
+	</div>
+	<div class="col-2">
+	  <select id="breath_alcohol_level">
+	    <option value="NA">I did not take this test</option>
+	    <option value="0.07">0.07 or below</option>
+	    <option value="0.08">0.08</option>
+	    <option value="0.09">0.09</option>
+	    <option value="0.10">0.10</option>
+	    <option value="0.11">0.11</option>
+	    <option value="0.12">0.12</option>
+	    <option value="0.13">0.13</option>
+	    <option value="0.14">0.14</option>
+	    <option value="0.15000000000000001">0.15</option> 
+	    <option value="0.16">0.16</option>
+	    <option value="0.17">0.17 or above</option>
+	  </select>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-1">
+	  <label for="prior_count">Count of my previous DUI convictions</label>
+	</div>
+	<div class="col-2">
+	  <select id="prior_count">
+	    <option value="0">None</option>
+	    <option value="1">One</option>
+	    <option value="2">Two</option>
+	    <option value="3">Three</option>
+	    <option value="4">Four</option>
+	    <option value="5">Five or More</option>
+	  </select>
+	</div>
+      </div>
+      
+      <div class="row">
+	<div class="col-1">
+	  <label for="date_of_instant_offense">Date of the most recent prior DUI offense (if applicable)</label>
+	</div>
+	<div class="col-2">
+	  <input type="date" id="date_of_last_offense" name="date_of_last_offense"><br>
+	</div>
+      </div>
+      
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="driving_or_in_control" name="driving_or_in_control">
+	</div>
+	<div class="col-4">
+	  <label for="driving_or_in_control">I was driving or in actual physical control of a vehicle within Florida.</label>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="faculties_impaired" name="faculties_impaired">
+	</div>
+	<div class="col-4">
+	  <label for="faculties_impaired">I was under the influence of alcoholic beverages, any chemical substance set forth in s. 877.111, or any substance controlled under chapter 893, when affected to the extent that my normal faculties are impaired.</label> 
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="accompanied_by_minor" name="accompanied_by_minor">
+	</div>
+	<div class="col-4">
+	  <label for="accompanied_by_minor">At the time of the offense I was accompanied in the vehicle by a person under the age of 18 years.</label><br>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="damage_to_property" name="damage_to_property">
+	</div>
+	<div class="col-4">
+	  <label for="damage_to_property">I operated a vehicle and by reason of such operation, caused or contributed to causing damage to the property of another.</label><br>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="light_injury" name="light_injury">
+	</div>
+	<div class="col-4">
+	  <label for="light_injury">I operated a vehicle and by reason of such operation, caused or contributed to causing damage to the person of another (but neither death nor serious bodily injury, as defined in s. 316.1933).</label><br>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="serious_injury" name="serious_injury">
+	</div>
+	<div class="col-4">
+	  <label for="serious_injury">I operated a vehicle and by reason of such operation, caused or contributed to causing serious bodily injury to another, as defined in s. 316.1933.</label><br> 
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="death" name="death">
+	</div>
+	<div class="col-4">
+	  <label for="death">I operated a vehicle and by reason of such operation, caused or contributed to causing the death of any human being or unborn child.</label><br>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="know_crash" name="know_crash">
+	</div>
+	<div class="col-4">
+	  <label for="know_crash">At the time of the crash (if any), I knew, or should have known, that the crash occurred.</label><br>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-3">
+	  <input type="checkbox" id="fail_to_aid" name="fail_to_aid">
+	</div>
+	<div class="col-4">
+	  <label for="fail_to_aid">At the time of the crash (if any) I failed to give information and render aid as required by s. 316.062.</label><br>
+	</div>
+      </div>
+      <pre id="output"></pre>
+      <button type="button" onclick="computeFine()">Submit</button><br>
+    </form>
+    <script type="application/javascript" src="webUI.js"></script>
+  </body>
+</html>

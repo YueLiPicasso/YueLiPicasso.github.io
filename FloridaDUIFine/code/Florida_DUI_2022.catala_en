@@ -1,0 +1,230 @@
+316.193 Driving under the influence; penalties.—
+```catala-metadata
+declaration enumeration Date_opt : 
+  -- Date content date
+  -- Not_Applicable
+declaration enumeration Decimal_opt : 
+  -- Decimal content decimal
+  -- Not_Applicable
+declaration structure DUI_Fine :
+  data min content money
+  data max content money  
+declaration scope DUI :
+  input    date_of_the_current_DUI_offense                                                                content date
+  input    is_driving_or_in_actual_physical_control_of_a_vehicle_within_this_state                        condition # (1)
+  input    is_so_influenced_that_the_normal_faculties_are_impaired                                        condition # (1)(a)
+  input    blood_alcohol_level                                                                            content Decimal_opt 
+  input    breath_alcohol_level                                                                           content Decimal_opt 
+  input    count_of_previous_DUI_convictions                                                              content integer
+  input    date_of_the_most_recent_prior_DUI_conviction                                                   content Date_opt
+  input    the_person_operates_a_vehcle                                                                   condition # (3)(b)
+  input    causes_or_contributes_to_causing_damage_to_the_property_of_another                             condition # (3)(c)1. 
+  input    causes_or_contributes_to_causing_damage_to_the_person_of_another_not_death_not_serious_injury  condition # (3)(c)1. 
+  input    causes_or_contributes_to_causing_serious_bodily_injury_to_another                              condition # (3)(c)2.
+  input    causes_or_contributes_to_causing_the_death_of_any_human_being_or_unborn_child                  condition # (3)(c)3.
+  input    at_the_time_of_the_crash_the_person_knew_or_should_have_known_the_crash_occurred               condition # (3)(c)3.b.(I)
+  input    the_person_failed_to_give_information_and_render_aid_as_required                               condition # (3)(c)3.b.(II)
+  input    accompanied_in_the_vehicle_by_a_person_under_the_age_of_18_years                               condition # (4)
+  internal first_conviction                                                                               condition # (2)(a)
+  internal second_conviction                                                                              condition # (2)(a)
+  internal third_conviction                                                                               condition # (4)(a)3.
+  internal fourth_or_subsequent_conviction                                                                condition # (2)(b)3.
+  internal third_offense_within_10_years                                                                  condition # (2)(b)1.
+  internal third_offense_outwith_10_years                                                                 condition # (2)(b)2.
+  internal a_blood_alcohol_level_of_dot08_or_more_grams_per_100_milliliters_of_blood                      condition # (1)(b)
+  internal a_breath_alcohol_level_of_dot08_or_more_grams_per_210_liters_of_breath                         condition # (1)(c)
+  internal a_blood_alcohol_level_of_dot15_or_more_grams_per_100_milliliters_of_blood                      condition # (4)
+  internal a_breath_alcohol_level_of_dot15_or_more_grams_per_210_liters_of_breath                         condition # (4)
+  internal the_person_is_in_violation_of_subsection_1                                                     condition # (2)(a) & (3)(a)
+  internal dui_with_damage_to_person_or_property_not_death_not_serious_injury                             condition # (3)(c)1.
+  internal dui_with_serious_bodily_injury                                                                 condition # (3)(c)2.
+  internal the_person_is_convicted_of_DUI_manslaughter                                                    condition # (3)(c)3.
+  internal the_person_is_in_violation_of_subsection_4                                                     condition # (4)
+  output   fine_by_record                                                                                 content DUI_Fine
+  output   fine_by_damage                                                                                 content DUI_Fine
+
+scope DUI :
+  # compute some internal variables based on inputs and common sense
+  rule first_conviction                under condition count_of_previous_DUI_convictions = 0  consequence fulfilled
+  rule second_conviction               under condition count_of_previous_DUI_convictions = 1  consequence fulfilled
+  rule third_conviction                under condition count_of_previous_DUI_convictions = 2  consequence fulfilled
+  rule fourth_or_subsequent_conviction under condition count_of_previous_DUI_convictions >= 3 consequence fulfilled
+  # Subtlty: 10 years is implemented as 3650 days
+  rule third_offense_within_10_years   
+       under condition 
+         third_conviction and date_of_the_most_recent_prior_DUI_conviction with pattern Date_opt.Date of date_of_last_DUI and 
+         date_of_the_current_DUI_offense -@ date_of_last_DUI <=^ 3650 day 
+       consequence fulfilled
+       
+  rule third_offense_outwith_10_years 
+       under condition 
+         third_conviction and date_of_the_most_recent_prior_DUI_conviction with pattern Date_opt.Date of date_of_last_DUI and 
+         date_of_the_current_DUI_offense -@ date_of_last_DUI >^ 3650 day 
+       consequence fulfilled
+       
+  rule a_blood_alcohol_level_of_dot08_or_more_grams_per_100_milliliters_of_blood 
+       under condition blood_alcohol_level  with pattern Decimal of bac and bac >=. 0.08 consequence fulfilled
+       
+  rule a_breath_alcohol_level_of_dot08_or_more_grams_per_210_liters_of_breath
+       under condition breath_alcohol_level with pattern Decimal of bac and bac >=. 0.08 consequence fulfilled
+       
+  rule a_blood_alcohol_level_of_dot15_or_more_grams_per_100_milliliters_of_blood
+       under condition blood_alcohol_level  with pattern Decimal of bac and bac >=. 0.15 consequence fulfilled
+       
+  rule a_breath_alcohol_level_of_dot15_or_more_grams_per_210_liters_of_breath
+       under condition breath_alcohol_level with pattern Decimal of bac and bac >=. 0.15 consequence fulfilled
+       
+  label default_no_fine_by_record definition fine_by_record equals DUI_Fine { -- min : $ 0 -- max : $ 0 }   
+  label default_no_fine_by_damage definition fine_by_damage equals DUI_Fine { -- min : $ 0 -- max : $ 0 }     
+```
+(1) A person is guilty of the offense of driving under the influence and is subject to punishment as provided in subsection (2) if the person is driving or in actual physical control of a vehicle within this state and:
+(a) The person is under the influence of alcoholic beverages, any chemical substance set forth in s. 877.111, or any substance controlled under chapter 893, when affected to the extent that the person’s normal faculties are impaired;
+(b) The person has a blood-alcohol level of 0.08 or more grams of alcohol per 100 milliliters of blood; or
+(c) The person has a breath-alcohol level of 0.08 or more grams of alcohol per 210 liters of breath.
+```catala
+scope DUI :
+  rule the_person_is_in_violation_of_subsection_1 under condition 
+       is_driving_or_in_actual_physical_control_of_a_vehicle_within_this_state and 
+      (is_so_influenced_that_the_normal_faculties_are_impaired or
+       a_blood_alcohol_level_of_dot08_or_more_grams_per_100_milliliters_of_blood or
+       a_breath_alcohol_level_of_dot08_or_more_grams_per_210_liters_of_breath) 
+    consequence fulfilled  
+```
+(2)(a) Except as provided in paragraph (b), subsection (3), or subsection (4), any person who is convicted of a violation of subsection (1) shall be punished:
+1. By a fine of:
+a. Not less than $500 or more than $1,000 for a first conviction.
+b. Not less than $1,000 or more than $2,000 for a second conviction; and
+```catala
+scope DUI : 
+   label default_DUI_fine_first_conviction exception default_no_fine_by_record
+   definition fine_by_record under condition the_person_is_in_violation_of_subsection_1 and first_conviction consequence equals 
+     DUI_Fine { -- min : $ 500   -- max : $ 1,000 }
+     
+   label default_DUI_fine_second_conviction exception default_no_fine_by_record 
+   definition fine_by_record under condition the_person_is_in_violation_of_subsection_1 and second_conviction consequence equals 
+     DUI_Fine { -- min : $ 1,000 -- max : $ 2,000 }
+```
+2. By imprisonment for:
+a. Not more than 6 months for a first conviction.
+b. Not more than 9 months for a second conviction.
+3. For a second conviction, by mandatory placement for a period of at least 1 year, at the convicted person’s sole expense, of an ignition interlock device approved by the department in accordance with s. 316.1938 upon all vehicles that are individually or jointly leased or owned and routinely operated by the convicted person, when the convicted person qualifies for a permanent or restricted license.
+The portion of a fine imposed in excess of $500 pursuant to sub-subparagraph 1.a. and the portion of a fine imposed in excess of $1,000 pursuant to sub-subparagraph 1.b., shall be remitted by the clerk to the Department of Revenue for deposit into the General Revenue Fund.
+(b)1. Any person who is convicted of a third violation of this section for an offense that occurs within 10 years after a prior conviction for a violation of this section commits a felony of the third degree, punishable as provided in s. 775.082, s. 775.083, or s. 775.084. In addition, the court shall order the mandatory placement for a period of not less than 2 years, at the convicted person’s sole expense, of an ignition interlock device approved by the department in accordance with s. 316.1938 upon all vehicles that are individually or jointly leased or owned and routinely operated by the convicted person, when the convicted person qualifies for a permanent or restricted license.
+```catala
+scope DUI : 
+  label default_DUI_fine_third_offense_within_10_years exception default_no_fine_by_record
+  definition fine_by_record under condition the_person_is_in_violation_of_subsection_1 and third_offense_within_10_years consequence equals 
+     DUI_Fine { -- min : $ 0 -- max : $ 5,000 } # F.S. 775.083(1)(c)
+```
+2. Any person who is convicted of a third violation of this section for an offense that occurs more than 10 years after the date of a prior conviction for a violation of this section shall be punished by a fine of not less than $2,000 or more than $5,000 and by imprisonment for not more than 12 months. The portion of a fine imposed in excess of $2,500 pursuant to this subparagraph shall be remitted by the clerk to the Department of Revenue for deposit into the General Revenue Fund. In addition, the court shall order the mandatory placement for a period of at least 2 years, at the convicted person’s sole expense, of an ignition interlock device approved by the department in accordance with s. 316.1938 upon all vehicles that are individually or jointly leased or owned and routinely operated by the convicted person, when the convicted person qualifies for a permanent or restricted license.
+```catala
+scope DUI : 
+   label default_DUI_fine_third_offense_outwith_10_years exception default_no_fine_by_record
+   definition fine_by_record under condition the_person_is_in_violation_of_subsection_1 and third_offense_outwith_10_years consequence equals
+     DUI_Fine { -- min : $ 2,000 -- max : $ 5,000 }
+```
+3. Any person who is convicted of a fourth or subsequent violation of this section, regardless of when any prior conviction for a violation of this section occurred, commits a felony of the third degree, punishable as provided in s. 775.082, s. 775.083, or s. 775.084. However, the fine imposed for such fourth or subsequent violation may be not less than $2,000. The portion of a fine imposed in excess of $1,000 pursuant to this subparagraph shall be remitted by the clerk to the Department of Revenue for deposit into the General Revenue Fund.
+```catala
+scope DUI : 
+  label default_DUI_fine_fourth_or_subsequent_conviction exception default_no_fine_by_record
+  definition fine_by_record under condition the_person_is_in_violation_of_subsection_1 and fourth_or_subsequent_conviction
+    consequence equals DUI_Fine { -- min : $ 2,000 -- max : $ 5,000 } # maximum fine is according to 775.083(1)(c)
+```
+(c) In addition to the penalties in paragraph (a), the court may order placement, at the convicted person’s sole expense, of an ignition interlock device approved by the department in accordance with s. 316.1938 for at least 6 continuous months upon all vehicles that are individually or jointly leased or owned and routinely operated by the convicted person if, at the time of the offense, the person had a blood-alcohol level or breath-alcohol level of .08 or higher.
+(3) Any person:
+(a) Who is in violation of subsection (1);
+(b) Who operates a vehicle; and
+(c) Who, by reason of such operation, causes or contributes to causing:
+1. Damage to the property or person of another commits a misdemeanor of the first degree, punishable as provided in s. 775.082 or s. 775.083.
+```catala
+scope DUI : 
+  rule dui_with_damage_to_person_or_property_not_death_not_serious_injury under condition 
+       the_person_is_in_violation_of_subsection_1 and the_person_operates_a_vehcle and 
+      (causes_or_contributes_to_causing_damage_to_the_property_of_another or
+       causes_or_contributes_to_causing_damage_to_the_person_of_another_not_death_not_serious_injury) 
+    consequence fulfilled
+  
+  label fine_by_damage_to_property_or_light_injury exception default_no_fine_by_damage definition fine_by_damage 
+  under condition dui_with_damage_to_person_or_property_not_death_not_serious_injury consequence equals 
+    DUI_Fine { -- min : $ 0 -- max : $ 1,000 } # according to 775.083(1)(d)  
+```
+2. Serious bodily injury to another, as defined in s. 316.1933, commits a felony of the third degree, punishable as provided in s. 775.082, s. 775.083, or s. 775.084.
+```catala
+scope DUI : 
+  rule dui_with_serious_bodily_injury under condition 
+       the_person_is_in_violation_of_subsection_1 and the_person_operates_a_vehcle and 
+       causes_or_contributes_to_causing_serious_bodily_injury_to_another 
+    consequence fulfilled
+    
+  label fine_by_damage_serious_injury exception fine_by_damage_to_property_or_light_injury definition fine_by_damage 
+  under condition dui_with_serious_bodily_injury consequence equals 
+     DUI_Fine { -- min : $ 0 -- max : $ 5,000 } # F.S. 775.083(1)(c)
+```
+3. The death of any human being or unborn child commits DUI manslaughter, and commits:
+```catala
+scope DUI : 
+  rule the_person_is_convicted_of_DUI_manslaughter under condition the_person_is_in_violation_of_subsection_1 and 
+       the_person_operates_a_vehcle and causes_or_contributes_to_causing_the_death_of_any_human_being_or_unborn_child 
+    consequence fulfilled
+```
+a. A felony of the second degree, punishable as provided in s. 775.082, s. 775.083, or s. 775.084.
+```catala
+scope DUI :
+  label fine_by_damage_dui_manslaughter exception fine_by_damage_serious_injury definition fine_by_damage 
+  under condition the_person_is_convicted_of_DUI_manslaughter consequence equals 
+     DUI_Fine { -- min : $ 0 -- max : $ 10,000 } # F.S. 775.083(1)(b)
+```
+b. A felony of the first degree, punishable as provided in s. 775.082, s. 775.083, or s. 775.084, if:
+(I) At the time of the crash, the person knew, or should have known, that the crash occurred; and
+(II) The person failed to give information and render aid as required by s. 316.062.
+```catala
+scope DUI : 
+  exception fine_by_damage_dui_manslaughter definition fine_by_damage 
+  under condition the_person_is_convicted_of_DUI_manslaughter and
+                    at_the_time_of_the_crash_the_person_knew_or_should_have_known_the_crash_occurred and 
+                    the_person_failed_to_give_information_and_render_aid_as_required                   
+    consequence equals DUI_Fine { -- min : $ 0 -- max : $ 10,000 } # F.S. 775.083(1)(b)
+```    
+For purposes of this subsection, the term “unborn child” has the same meaning as provided in s. 775.021(5). A person who is convicted of DUI manslaughter shall be sentenced to a mandatory minimum term of imprisonment of 4 years.
+(4) Any person who is convicted of a violation of subsection (1) and who has a blood-alcohol level or breath-alcohol level of 0.15 or higher, or any person who is convicted of a violation of subsection (1) and who at the time of the offense was accompanied in the vehicle by a person under the age of 18 years, shall be punished:
+```catala
+scope DUI :
+  rule the_person_is_in_violation_of_subsection_4 
+    under condition the_person_is_in_violation_of_subsection_1                                 and 
+                    (a_blood_alcohol_level_of_dot15_or_more_grams_per_100_milliliters_of_blood or
+                     a_breath_alcohol_level_of_dot15_or_more_grams_per_210_liters_of_breath    or
+                     accompanied_in_the_vehicle_by_a_person_under_the_age_of_18_years) consequence fulfilled
+```
+(a) By a fine of:
+1. Not less than $1,000 or more than $2,000 for a first conviction.
+2. Not less than $2,000 or more than $4,000 for a second conviction.
+3. Not less than $4,000 for a third or subsequent conviction.
+(b) By imprisonment for:
+1. Not more than 9 months for a first conviction.
+2. Not more than 12 months for a second conviction.
+
+For the purposes of this subsection, only the instant offense is required to be a violation of subsection (1) by a person who has a blood-alcohol level or breath-alcohol level of 0.15 or higher. 
+```catala
+scope DUI : 
+   exception default_DUI_fine_first_conviction                definition fine_by_record 
+     under condition the_person_is_in_violation_of_subsection_4 and first_conviction 
+     consequence equals DUI_Fine { -- min : $ 1,000 -- max : $ 2,000 }
+     
+   exception default_DUI_fine_second_conviction               definition fine_by_record 
+     under condition the_person_is_in_violation_of_subsection_4 and second_conviction 
+     consequence equals DUI_Fine { -- min : $ 2,000 -- max : $ 4,000 }   
+     
+   exception default_DUI_fine_third_offense_within_10_years   definition fine_by_record 
+     under condition the_person_is_in_violation_of_subsection_4 and third_offense_within_10_years
+     consequence equals DUI_Fine { -- min : $ 4,000 -- max : $ 5,000 } # maximum fine is according to 775.083(1)(c)
+     
+   exception default_DUI_fine_third_offense_outwith_10_years  definition fine_by_record 
+     under condition the_person_is_in_violation_of_subsection_4 and third_offense_outwith_10_years
+     consequence equals DUI_Fine { -- min : $ 4,000 -- max : $ 5,000 } # maximum fine is according to (2)(b)2. 
+      
+   exception default_DUI_fine_fourth_or_subsequent_conviction definition fine_by_record 
+     under condition the_person_is_in_violation_of_subsection_4 and fourth_or_subsequent_conviction 
+     consequence equals DUI_Fine { -- min : $ 4,000 -- max : $ 5,000 } # maximum fine is according to 775.083(1)(c)
+```
+The portion of a fine imposed in excess of $1,000 pursuant to subparagraph (a)1. and the portion of a fine imposed in excess of $2,000 pursuant to subparagraph (a)2. or subparagraph (a)3., shall be remitted by the clerk to the Department of Revenue for deposit into the General Revenue Fund.
+(c) In addition to the penalties in paragraphs (a) and (b), the court shall order the mandatory placement, at the convicted person’s sole expense, of an ignition interlock device approved by the department in accordance with s. 316.1938 upon all vehicles that are individually or jointly leased or owned and routinely operated by the convicted person for not less than 6 continuous months for the first offense and for not less than 2 continuous years for a second offense, when the convicted person qualifies for a permanent or restricted license.

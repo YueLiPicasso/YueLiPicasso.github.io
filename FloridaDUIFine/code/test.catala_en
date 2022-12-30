@@ -1,0 +1,29 @@
+> Include : Florida_DUI_2022.catala_en
+
+```catala
+declaration scope Test :
+  dui_fine scope DUI 
+  output fine_by_record content DUI_Fine
+  output fine_by_damage content DUI_Fine
+  
+# The law is ambiguous when, for example, the instant DUI offense is a fourth conviction, and also causes damage to property. A fourth DUI is on the one hand a 3rd degree felony with fine $ 2,000 ~ $ 5,000 according to (2)(b)3.; but since it also damages propery, by (3)(c)1. it is a misdemennor of the first degree, with a fine upto $ 1,000. 
+
+scope Test :
+  definition dui_fine.date_of_the_current_DUI_offense                                          equals |2022-12-20|
+  definition dui_fine.is_driving_or_in_actual_physical_control_of_a_vehicle_within_this_state  equals true
+  #definition dui_fine.is_so_influenced_that_the_normal_faculties_are_impaired                  equals true
+  definition dui_fine.blood_alcohol_level                                                      equals Decimal_opt.Decimal content 0.15
+  definition dui_fine.breath_alcohol_level                                                     equals Decimal_opt.Not_Applicable
+  definition dui_fine.count_of_previous_DUI_convictions                                        equals 0
+  definition dui_fine.date_of_the_most_recent_prior_DUI_conviction                             equals Date_opt.Not_Applicable
+  #definition dui_fine.the_person_operates_a_vehcle                                             equals true
+  #definition dui_fine.causes_or_contributes_to_causing_damage_to_the_property_of_another       equals true
+  #definition dui_fine.causes_or_contributes_to_causing_damage_to_the_person_of_another_not_death_not_serious_injury equals true
+  #definition dui_fine.causes_or_contributes_to_causing_serious_bodily_injury_to_another                             equals true
+  #definition dui_fine.causes_or_contributes_to_causing_the_death_of_any_human_being_or_unborn_child                 equals true
+  #definition dui_fine.at_the_time_of_the_crash_the_person_knew_or_should_have_known_the_crash_occurred              equals true
+  #definition dui_fine.the_person_failed_to_give_information_and_render_aid_as_required                              equals true
+  #definition dui_fine.accompanied_in_the_vehicle_by_a_person_under_the_age_of_18_years                              equals true
+  definition fine_by_record equals dui_fine.fine_by_record
+  definition fine_by_damage equals dui_fine.fine_by_damage
+``` 

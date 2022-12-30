@@ -1,0 +1,21 @@
+(executable
+ (name florida_api_web)
+ (modes byte js)
+ (modules Florida_api_web Florida)
+ (preprocess
+  (pps js_of_ocaml-ppx))
+ (libraries catala.runtime_ocaml catala.runtime_jsoo js_of_ocaml))
+
+(env
+  (dev (flags
+    :standard
+    -safe-string
+    -g
+    -w -37
+  ))
+  (release (flags
+    :standard
+    -safe-string
+    -g
+    -w -37
+  )))
