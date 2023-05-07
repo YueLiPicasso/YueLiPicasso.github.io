@@ -1,0 +1,487 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>On Overflow of Unsigned Integer Multiplication</TITLE>
+<META NAME="description" CONTENT="On Overflow of Unsigned Integer Multiplication">
+<META NAME="keywords" CONTENT="MUL">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="MUL.css">
+
+</HEAD>
+
+<BODY >
+<H1 class="CENTER">On Overflow of Unsigned Integer Multiplication</H1>
+<P class="CENTER"><STRONG>Yue LI</STRONG>
+</P>
+<BR><P class="CENTER"><B>Date:</B> May 7, 2023</P>
+
+<HR>
+
+The x86 unsigned multiplication instruction MUL multiplies RAX with some quadword and stores the result in RDX:RAX.  The overflow flag OF and carry flag CF are set if the high-order bits of the result, which are stored in RDX, are non-zero. The notion of overflow applicable to the MUL instruction is therefore that multiplication of two <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN>-bit (unsigned) integers has a result that is longer than <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN> bits. Taking into account that MUL actually uses <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img2.svg"
+ ALT="$2n$"></SPAN> bits to store the result of multiplication of two <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN>-bit numbers, in this blog we ask and answer a different overflow question: <SPAN  CLASS="textit">is it possible that multiplying two n-bit unsigned integers and the result is longer than 2n bits?</SPAN>
+
+<P>
+We shall answer negatively, and prove the following Proposition.
+
+<P>
+<P>
+<DIV><B>Proposition  <SPAN CLASS="arabic">1</SPAN></B> &nbsp; 
+<I>For all <!-- MATH
+ $n=1,2,3,\ldots$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img3.svg"
+ ALT="$n=1,2,3,\ldots$"></SPAN>, the result of multiplication of two unsigned n-bit integers has at most <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img2.svg"
+ ALT="$2n$"></SPAN> bits.</I></DIV><P></P>
+
+<P>
+Since an all-ones, like 11111111111, is the largest <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN>-bit unsigned integer for every <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN>, if we can show that two <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN>-bit all-ones multiply and the result is no more than <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img2.svg"
+ ALT="$2n$"></SPAN> bits, then the Proposition easily follows. 
+
+<P>
+<P>
+<DIV><B>Lemma  <SPAN CLASS="arabic">1</SPAN></B> &nbsp; 
+<I>For all <!-- MATH
+ $n=1,2,3,\ldots$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img3.svg"
+ ALT="$n=1,2,3,\ldots$"></SPAN>, the square of the largest n-bit unsigned integer has at most <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img2.svg"
+ ALT="$2n$"></SPAN> bits.</I></DIV><P></P>
+
+<P>
+Our proof for the Lemma is inductive, but before examining the formal arguments, let's warm up by looking at some particular cases.
+
+<P>
+
+<H1><A ID="SECTION00010000000000000000">
+Pattern Discovery for Induction</A>
+</H1>
+
+<P>
+Below we show that the Lemma holds for <!-- MATH
+ $1\leq n\leq 6$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.04ex; vertical-align: -0.43ex; " SRC="img4.svg"
+ ALT="$1\leq n\leq 6$"></SPAN>. We shall use sum of powers of 2 to denote an unsigned binary integer, then e.g. 1111 is <!-- MATH
+ $2^3+2^2+2^1+2^0$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.31ex; vertical-align: -0.31ex; " SRC="img5.svg"
+ ALT="$2^3+2^2+2^1+2^0$"></SPAN>. Equation&nbsp;<A HREF="#eq0">1</A> shows that <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img6.svg"
+ ALT="$1^2$"></SPAN> has 1 bit.
+
+<P>
+<P></P>
+<DIV CLASS="mathdisplay"><A ID="eq0"></A><!-- MATH
+ \begin{equation}
+(2^0)^2=2^0
+\end{equation}
+ -->
+<TABLE CLASS="equation" >
+<TR>
+<TD  style="text-align:center;"><SPAN CLASS="MATH"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img7.svg"
+ ALT="$\displaystyle (2^0)^2=2^0$"></SPAN></TD>
+<TD  CLASS="eqno" style="text-align:right">
+(<SPAN CLASS="arabic">1</SPAN>)</TD></TR>
+</TABLE></DIV>
+<P></P>
+
+<P>
+Next, when building Equation&nbsp;<A HREF="#eq1">2</A> we use Equation&nbsp;<A HREF="#eq0">1</A> (as underlined).
+
+<P>
+<BR>
+<DIV CLASS="mathdisplay"><A ID="eq1"></A><!-- MATH
+ \begin{eqnarray}
+&  (2^1+2^0)^2 \nonumber\\
+   =\ & (2^1)^2+2\cdot2^1\cdot2^0+\underline{(2^0)^2} \nonumber\\
+   =\  & (2^2+2^2)+\underline{2^0}_{\mbox{ by (\ref{eq0})}} \nonumber\\
+   =\  & 2^3+2^0
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT">&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img8.svg"
+ ALT="$\displaystyle (2^1+2^0)^2$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.27ex; vertical-align: -1.16ex; " SRC="img10.svg"
+ ALT="$\displaystyle (2^1)^2+2\cdot2^1\cdot2^0+\underline{(2^0)^2}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.75ex; vertical-align: -1.64ex; " SRC="img11.svg"
+ ALT="% latex2html id marker 365
+$\displaystyle (2^2+2^2)+\underline{2^0}_{\mbox{ by (\ref{eq0})}}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.42ex; vertical-align: -0.31ex; " SRC="img12.svg"
+ ALT="$\displaystyle 2^3+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">2</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+Equation&nbsp;<A HREF="#eq1">2</A> shows that <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img13.svg"
+ ALT="$11^2$"></SPAN> has 4 bits. Next, when building Equation&nbsp;<A HREF="#eq2">3</A> we use Equation&nbsp;<A HREF="#eq1">2</A>.
+
+<P>
+<BR>
+<DIV CLASS="mathdisplay"><A ID="eq2"></A><!-- MATH
+ \begin{eqnarray}
+& (2^2+2^1+2^0)^2\nonumber\\
+   =\ & (2^2)^2+2\cdot2^2(2^1+2^0)+\underline{(2^1+2^0)^2}\nonumber\\
+   =\ & 2^4+2^3(2^1+2^0)+\underline{2^3+2^0}_{\mbox{ by (\ref{eq1})}}\nonumber\\
+   =\ & (2^4+2^4)+(2^3+2^3)+2^0\nonumber\\
+   =\ & 2^5+2^4+2^0
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT">&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img14.svg"
+ ALT="$\displaystyle (2^2+2^1+2^0)^2$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.27ex; vertical-align: -1.16ex; " SRC="img15.svg"
+ ALT="$\displaystyle (2^2)^2+2\cdot2^2(2^1+2^0)+\underline{(2^1+2^0)^2}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.75ex; vertical-align: -1.64ex; " SRC="img16.svg"
+ ALT="% latex2html id marker 382
+$\displaystyle 2^4+2^3(2^1+2^0)+\underline{2^3+2^0}_{\mbox{ by (\ref{eq1})}}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img17.svg"
+ ALT="$\displaystyle (2^4+2^4)+(2^3+2^3)+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.42ex; vertical-align: -0.31ex; " SRC="img18.svg"
+ ALT="$\displaystyle 2^5+2^4+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">3</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+Equation&nbsp;<A HREF="#eq2">3</A> shows that <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img19.svg"
+ ALT="$111^2$"></SPAN> has 6 bits. Next, when building Equation&nbsp;<A HREF="#eq3">4</A> we use Equation&nbsp;<A HREF="#eq2">3</A>.
+
+<P>
+<BR>
+<DIV CLASS="mathdisplay"><A ID="eq3"></A><!-- MATH
+ \begin{eqnarray}
+& (2^3+2^2+2^1+2^0)^2\nonumber\\
+   =\ & (2^3)^2+2\cdot2^3(2^2+2^1+2^0)+\underline{(2^2+2^1+2^0)^2}\nonumber\\
+   =\ & 2^6+2^4(2^2+2^1+2^0)+\underline{2^5+2^4+2^0}_{\mbox{ by (\ref{eq2})}}\nonumber\\
+   =\ & (2^6+2^6)+(2^5+2^4)+(2^5+2^4)+2^0\nonumber\\
+   =\ & 2^7+2^6+2^5+2^0
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT">&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img20.svg"
+ ALT="$\displaystyle (2^3+2^2+2^1+2^0)^2$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.27ex; vertical-align: -1.16ex; " SRC="img21.svg"
+ ALT="$\displaystyle (2^3)^2+2\cdot2^3(2^2+2^1+2^0)+\underline{(2^2+2^1+2^0)^2}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.75ex; vertical-align: -1.64ex; " SRC="img22.svg"
+ ALT="% latex2html id marker 403
+$\displaystyle 2^6+2^4(2^2+2^1+2^0)+\underline{2^5+2^4+2^0}_{\mbox{ by (\ref{eq2})}}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img23.svg"
+ ALT="$\displaystyle (2^6+2^6)+(2^5+2^4)+(2^5+2^4)+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.42ex; vertical-align: -0.31ex; " SRC="img24.svg"
+ ALT="$\displaystyle 2^7+2^6+2^5+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">4</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+Equation&nbsp;<A HREF="#eq3">4</A> shows that <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img25.svg"
+ ALT="$1111^2$"></SPAN> has 8 bits. Next, when building Equation&nbsp;<A HREF="#eq4">5</A> we use Equation&nbsp;<A HREF="#eq3">4</A>.
+
+<P>
+<BR>
+<DIV CLASS="mathdisplay"><A ID="eq4"></A><!-- MATH
+ \begin{eqnarray}
+& (2^4+2^3+2^2+2^1+2^0)^2\nonumber\\
+   =\ & (2^4)^2+2\cdot2^4(2^3+2^2+2^1+2^0)+\underline{(2^3+2^2+2^1+2^0)^2}\nonumber\\
+   =\ & 2^8+2^5(2^3+2^2+2^1+2^0)+\underline{2^7+2^6+2^5+2^0}_{\mbox{ by (\ref{eq3})}}\nonumber\\
+   =\ & (2^8+2^8)+(2^7+2^6+2^5)+(2^7+2^6+2^5)+2^0\nonumber\\
+   =\ & 2^9+2^8+2^7+2^6+2^0
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT">&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img26.svg"
+ ALT="$\displaystyle (2^4+2^3+2^2+2^1+2^0)^2$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.27ex; vertical-align: -1.16ex; " SRC="img27.svg"
+ ALT="$\displaystyle (2^4)^2+2\cdot2^4(2^3+2^2+2^1+2^0)+\underline{(2^3+2^2+2^1+2^0)^2}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.75ex; vertical-align: -1.64ex; " SRC="img28.svg"
+ ALT="% latex2html id marker 424
+$\displaystyle 2^8+2^5(2^3+2^2+2^1+2^0)+\underline{2^7+2^6+2^5+2^0}_{\mbox{ by (\ref{eq3})}}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img29.svg"
+ ALT="$\displaystyle (2^8+2^8)+(2^7+2^6+2^5)+(2^7+2^6+2^5)+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.42ex; vertical-align: -0.31ex; " SRC="img30.svg"
+ ALT="$\displaystyle 2^9+2^8+2^7+2^6+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">5</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+Equation&nbsp;<A HREF="#eq4">5</A> shows that <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img31.svg"
+ ALT="$11111^2$"></SPAN> has 10 bits. Next, when building Equation&nbsp;<A HREF="#eq5">6</A> we use Equation&nbsp;<A HREF="#eq4">5</A>.
+
+<P>
+<BR>
+<DIV CLASS="mathdisplay"><A ID="eq5"></A><!-- MATH
+ \begin{eqnarray}
+& (2^5+2^4+2^3+2^2+2^1+2^0)^2\nonumber\\
+   =\ & (2^5)^2+2\cdot2^5(2^4+2^3+2^2+2^1+2^0)+\underline{(2^4+2^3+2^2+2^1+2^0)^2}\nonumber\\
+   =\ & 2^{10}+2^6(2^4+2^3+2^2+2^1+2^0)+\underline{2^9+2^8+2^7+2^6+2^0}_{\mbox{ by (\ref{eq4})}}\nonumber\\
+   =\ & (2^{10}+2^{10})+(2^9+2^8+2^7+2^6)+(2^9+2^8+2^7+2^6)+2^0\nonumber\\
+   =\ & 2^{11}+2^{10}+2^9+2^8+2^7+2^0
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT">&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img32.svg"
+ ALT="$\displaystyle (2^5+2^4+2^3+2^2+2^1+2^0)^2$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.27ex; vertical-align: -1.16ex; " SRC="img33.svg"
+ ALT="$\displaystyle (2^5)^2+2\cdot2^5(2^4+2^3+2^2+2^1+2^0)+\underline{(2^4+2^3+2^2+2^1+2^0)^2}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.75ex; vertical-align: -1.64ex; " SRC="img34.svg"
+ ALT="% latex2html id marker 445
+$\displaystyle 2^{10}+2^6(2^4+2^3+2^2+2^1+2^0)+\underline{2^9+2^8+2^7+2^6+2^0}_{\mbox{ by (\ref{eq4})}}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img35.svg"
+ ALT="$\displaystyle (2^{10}+2^{10})+(2^9+2^8+2^7+2^6)+(2^9+2^8+2^7+2^6)+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.42ex; vertical-align: -0.31ex; " SRC="img36.svg"
+ ALT="$\displaystyle 2^{11}+2^{10}+2^9+2^8+2^7+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">6</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+Equation&nbsp;<A HREF="#eq5">6</A> shows that <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img37.svg"
+ ALT="$111111^2$"></SPAN> has 12 bits.
+
+<P>
+
+<H1><A ID="SECTION00020000000000000000">
+Formal Inductive Proof</A>
+</H1>
+
+<P>
+Based on Equations&nbsp;<A HREF="#eq0">1</A>&ndash;<A HREF="#eq5">6</A>, it is reasonable to conjecture that for all <!-- MATH
+ $n=0,1,2,3,\ldots$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img38.svg"
+ ALT="$n=0,1,2,3,\ldots$"></SPAN>,
+
+<P>
+<P></P>
+<DIV CLASS="mathdisplay"><A ID="eq6"></A><!-- MATH
+ \begin{equation}
+(2^n+2^{n-1}+\cdots+2^0)^2=2^{2n+1}+2^{2n}+\cdots+2^{n+2}+2^0.
+\end{equation}
+ -->
+<TABLE CLASS="equation" >
+<TR>
+<TD  style="text-align:center;"><SPAN CLASS="MATH"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img39.svg"
+ ALT="$\displaystyle (2^n+2^{n-1}+\cdots+2^0)^2=2^{2n+1}+2^{2n}+\cdots+2^{n+2}+2^0.$"></SPAN></TD>
+<TD  CLASS="eqno" style="text-align:right">
+(<SPAN CLASS="arabic">7</SPAN>)</TD></TR>
+</TABLE></DIV>
+<P></P>
+Note that on both sides of Equation&nbsp;<A HREF="#eq6">7</A> the powers of 2 are in descending order, so that the right hand side is instantiated by <SPAN CLASS="MATH"><IMG STYLE="height: 2.12ex; vertical-align: -0.12ex; " SRC="img40.svg"
+ ALT="$2^0$"></SPAN> when <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img41.svg"
+ ALT="$n=0$"></SPAN>, by <SPAN CLASS="MATH"><IMG STYLE="height: 2.31ex; vertical-align: -0.31ex; " SRC="img42.svg"
+ ALT="$2^3+2^0$"></SPAN> when <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img43.svg"
+ ALT="$n=1$"></SPAN> and by <!-- MATH
+ $2^5+2^4+2^0$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.31ex; vertical-align: -0.31ex; " SRC="img44.svg"
+ ALT="$2^5+2^4+2^0$"></SPAN> when <SPAN CLASS="MATH"><IMG STYLE="height: 1.72ex; vertical-align: -0.12ex; " SRC="img45.svg"
+ ALT="$n=2$"></SPAN>, and so on.
+
+<P>
+Based on how we progress from Equation&nbsp;<A HREF="#eq0">1</A> to&nbsp;<A HREF="#eq5">6</A>, we have the following scheme of progression from the square of sum up to <SPAN CLASS="MATH"><IMG STYLE="height: 1.23ex; vertical-align: -0.12ex; " SRC="img1.svg"
+ ALT="$n$"></SPAN>-th power of 2, to the square of sum up to <SPAN CLASS="MATH"><IMG STYLE="height: 2.55ex; vertical-align: -0.70ex; " SRC="img46.svg"
+ ALT="$(n+1)$"></SPAN>-th power of 2.
+
+<P>
+<BR>
+<DIV CLASS="mathdisplay"><A ID="eq7"></A><!-- MATH
+ \begin{eqnarray}
+& (2^{n+1}+2^n+\cdots+2^0)^2\nonumber\\
+   =\ & (2^{n+1})^2+2\cdot2^{n+1}(2^n+2^{n-1}+\cdots+2^0)+\underline{(2^n+2^{n-1}+\cdots+2^0)^2}\nonumber\\
+   =\ & 2^{2(n+1)}+2^{n+2}(2^n+2^{n-1}+\cdots+2^0)+\underline{2^{2n+1}+2^{2n}\cdots+2^{n+2}+2^0}_{\mbox{ by (\ref{eq6})}}\nonumber\\
+   =\ & \left(2^{2(n+1)}+2^{2(n+1)}\right)+(2^{2n+1}+\cdots+2^{n+2})+(2^{2n+1}+\cdots+2^{n+2})+2^0\nonumber\\
+   =\ & 2^{2(n+1)+1}+2^{2(n+1)}+\cdots+2^{(n+1)+2}+2^0
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT">&nbsp;</TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.81ex; vertical-align: -0.70ex; " SRC="img47.svg"
+ ALT="$\displaystyle (2^{n+1}+2^n+\cdots+2^0)^2$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.27ex; vertical-align: -1.16ex; " SRC="img48.svg"
+ ALT="$\displaystyle (2^{n+1})^2+2\cdot2^{n+1}(2^n+2^{n-1}+\cdots+2^0)+\underline{(2^n+2^{n-1}+\cdots+2^0)^2}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 3.92ex; vertical-align: -1.64ex; " SRC="img49.svg"
+ ALT="% latex2html id marker 487
+$\displaystyle 2^{2(n+1)}+2^{n+2}(2^n+2^{n-1}+\cdots+2^0)+\underline{2^{2n+1}+2^{2n}\cdots+2^{n+2}+2^0}_{\mbox{ by (\ref{eq6})}}$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 4.40ex; vertical-align: -1.63ex; " SRC="img50.svg"
+ ALT="$\displaystyle \left(2^{2(n+1)}+2^{2(n+1)}\right)+(2^{2n+1}+\cdots+2^{n+2})+(2^{2n+1}+\cdots+2^{n+2})+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+&nbsp;</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><IMG STYLE="height: 1.08ex; vertical-align: -0.12ex; " SRC="img9.svg"
+ ALT="$\displaystyle =\ $"></TD>
+<TD>&nbsp;</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><IMG STYLE="height: 2.60ex; vertical-align: -0.31ex; " SRC="img51.svg"
+ ALT="$\displaystyle 2^{2(n+1)+1}+2^{2(n+1)}+\cdots+2^{(n+1)+2}+2^0$"></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">8</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+Based on the facts that Equation&nbsp;<A HREF="#eq0">1</A> holds, and that for all <!-- MATH
+ $n=0,1,2,3,\ldots$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img38.svg"
+ ALT="$n=0,1,2,3,\ldots$"></SPAN>, if Equation&nbsp;<A HREF="#eq6">7</A> holds then Equation&nbsp;<A HREF="#eq7">8</A> holds, we can justly conclude that our conjecture that for all <!-- MATH
+ $n=0,1,2,3,\ldots$
+ -->
+<SPAN CLASS="MATH"><IMG STYLE="height: 2.17ex; vertical-align: -0.57ex; " SRC="img38.svg"
+ ALT="$n=0,1,2,3,\ldots$"></SPAN> Equation&nbsp;<A HREF="#eq6">7</A> holds, is true. This proves our Lemma. Then the Proposition follows. 
+
+<P>
+
+<H1><A ID="SECTION00030000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>On Overflow of Unsigned Integer Multiplication</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/">LaTeX2HTML</A> translator Version 2019.2 (Released June 5, 2019)
+<P>
+The command line arguments were: <BR>
+ <kbd>latex2html -no_navigation -split 0 MUL.tex</kbd>
+<P>
+The translation was initiated on 2023-05-07
+<BR><HR>
+
+</BODY>
+</HTML>

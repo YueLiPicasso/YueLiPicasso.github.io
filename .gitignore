@@ -1,1 +1,11 @@
+*.cut
+*.aux
+*.log
+*.out
+*.synctex.gz
+_*
 *~
+*.blg
+*.bbl
+*.ninja_deps
+*.ninja_log
