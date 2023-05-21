@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <style>body {
+    color: black;
+}
+    </style>
+  </head>
+  <style>
+    .content {
+	max-width: 600px;
+	margin: auto;
+    }
+    div.solid {
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 10px;
+    }
+  </style>
+  <body>
+    <div class="content">
+      <h1> Logical Operations on The ASCII Symbols 0 and 1</h1>
+      <p><em>21 May 2023</em>, By Yue LI</p>
+      <h2>Definition of "ASCII bits"</h2>
+      <p>The binary-digit symbols "0" and "1" are encoded as per ASCII as 0x30 and 0x31 respectively. Therefore we may call 0x30 and 0x31 <em>ASCII bits</em>. </p>
+      <h2>Goal</h2>
+      <p>
+	Define the logical operations <em>and</em>, <em>or</em>, <em>xor</em> and <em>not</em> for the ASCII bits, in terms of typical assembly instructions such as the bit-wise AND, OR, XOR etc.,  so that the operators produce the expected ASCII bits on the input ASCII bits.
+</p>
+<p>
+  For instance, we want to define:
+</p>
+      <p><em>and</em>, such that</p>
+      <div align="center">
+	<p>0x30 <em>and</em> 0x30 = 0x30, </p>
+	<p>0x30 <em>and</em> 0x31 = 0x30, </p>
+	<p>0x31 <em>and</em> 0x30 = 0x30, </p>
+	<p>0x31 <em>and</em> 0x31 = 0x31; </p>
+      </div>
+      <p><em>or</em>, such that</p>
+      <div align="center">
+	<p>0x30 <em>or</em> 0x30 = 0x30,</p>
+	<p>0x30 <em>or</em> 0x31 = 0x31,</p>
+	<p>0x31 <em>or</em> 0x30 = 0x31,</p>
+	<p>0x31 <em>or</em> 0x31 = 0x31;</p>
+      </div>
+      
+      <p><em>xor</em>, such that</p>
+      <div align="center">
+	<p>0x30 <em>xor</em> 0x30 = 0x30,</p>
+	<p>0x30 <em>xor</em> 0x31 = 0x31,</p>
+	<p>0x31 <em>xor</em> 0x30 = 0x31,</p>
+	<p>0x31 <em>xor</em> 0x31 = 0x30;</p>
+      </div>
+
+      <p><em>not</em>, such that</p>
+      <div align="center">
+	<p><em>not</em> 0x30 = 0x31,</p>
+	<p><em>not</em> 0x31 = 0x30.</p>
+      </div>
+      
+      <h2>Answer</h2>
+      
+      <p>Let x and y denote ASCII bits.</p>
+      <div align="center">
+	<p>x <em>and</em> y &#8797; x AND y</p>
+      </div>
+      <div align="center", class="solid">
+	<p>0x30 AND 0x30 = 0x30 </p>
+	<p>0x30 AND 0x31 = 0x30 </p>
+	<p>0x31 AND 0x30 = 0x30 </p>
+	<p>0x31 AND 0x31 = 0x31 </p>
+      </div>
+
+      <div align="center">
+	<p>x <em>or</em> y &#8797; x OR y</p>
+      </div>
+      <div align="center", class="solid">
+	<p>0x30 OR 0x30 = 0x30</p>
+	<p>0x30 OR 0x31 = 0x31</p>
+	<p>0x31 OR 0x30 = 0x31</p>
+	<p>0x31 OR 0x31 = 0x31</p>
+      </div>
+
+      <div align="center">
+	<p>x <em>xor</em> y &#8797; (x XOR y) OR 0x30</p>
+      </div>
+      <div align="center", class="solid">
+	<p>(0x30 XOR 0x30) OR 0x30 = 0x30</p>
+	<p>(0x30 XOR 0x31) OR 0x30 = 0x31</p>
+	<p>(0x31 XOR 0x30) OR 0x30 = 0x31</p>
+	<p>(0x31 XOR 0x31) OR 0x30 = 0x30</p>
+	<p><em>We can also use &plus; in the place of OR.</em></p>
+      </div>
+
+      <div align="center">
+	<p><em>not</em> x &#8797; (NOT x) &minus; 0x9E</p>
+      </div>
+      <div align="center", class="solid">
+	<p>(NOT 0x30) &minus; 0x9E = 0xCF &minus; 0x9E = 0x31</p>
+	<p>(NOT 0x31) &minus; 0x9E = 0xCE &minus; 0x9E = 0x30</p>
+      </div>
+      
+      <p align="right">Thanks !</p>
+    </div>
+  </body>
+</html>
